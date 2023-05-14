@@ -1,0 +1,3 @@
+Please make script.bat an exe!
+
+Put these both on your desktop!

@@ -1,0 +1,30 @@
+==========================================================================| 
+|      - Rules!                                                           |
+|         1) MUST BE ABLE TO FIT ON A 500MB CD DRIVE                      |
+|         2) MUST BE USABLE BY MOST PC'S ( ESPECIALLY OLD ONES )          |
+|         3) OPEN SOURCED AND WITH COMMENTS                               |
+|         4) FAST AND SNAPPY ( MULTI-THREADDING DOWNLOADS )               |
+==========================================================================|
+
+- Beta 1 works ( concept is possible ) 24 March 2023
+- Beta 2 works ( Concept is possible, drive is formattable, can download Windows, Can extract Windows, Can Can Apply .WIM file) 2 April 2023 ( working on and off)
+  |
+  |
+  --> Known issues:
+   - Non-bootable ( something is wrong with bcdedit)
+   - Current progress bar can't be utilised ( can't catch output for some reason )
+   - Processes are visible ( must be invisible, can't freeze up program. Utilse txt files to see process )
+   - Make ISO.bat can't create ISO ( try to also auto copy current debug release into System32 automatically and download nessesary files automatically )
+   - T & S ARE NOT DONE! MUST BE DONE BEFORE BECOMES PUBLIC!!!!!!!!
+- Beta 3 ( fixed all Beta 2 issues and add user creation, also utilse Fido for more versions and languages ( 100% possible )) FIRST RELEASE VERSION!
+- V1 Beta 1 ( UI redesign using ASP.Net , adding x86 version )
+
+- PortableISO V1.0 finally becomes public!!! 14 May 2023! ( fully functional can download and extract windows! Make ISO.bat is fully working! )
+  |
+  |
+  --> Known issues:
+   - Pretty ugly
+   - No skip OOBE option
+   - Command lines everywhere!
+   - No extraction progress!
+   - No T&S! 
