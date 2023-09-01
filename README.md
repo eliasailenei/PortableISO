@@ -4,4 +4,5 @@ Welcome to the PortableISO repo! This is an ongoing repo that allows you to down
 
 # Big thanks to:
 - 7-zip
-- Fido
+- [Database](https://files.rg-adguard.net/)https://files.rg-adguard.net/
+- rgadguard on twitter
