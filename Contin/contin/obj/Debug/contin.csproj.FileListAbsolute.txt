@@ -1,0 +1,13 @@
+C:\Users\remus\source\repos\contin\contin\obj\Debug\contin.csproj.AssemblyReference.cache
+C:\Users\remus\source\repos\contin\contin\obj\Debug\mainUI.Clean.resources
+C:\Users\remus\source\repos\contin\contin\obj\Debug\mainUI.Form2.resources
+C:\Users\remus\source\repos\contin\contin\obj\Debug\mainUI.OSSelect.resources
+C:\Users\remus\source\repos\contin\contin\obj\Debug\contin.Properties.Resources.resources
+C:\Users\remus\source\repos\contin\contin\obj\Debug\contin.csproj.GenerateResource.cache
+C:\Users\remus\source\repos\contin\contin\obj\Debug\contin.csproj.CoreCompileInputs.cache
+C:\Users\remus\source\repos\contin\contin\bin\Debug\contin.exe.config
+C:\Users\remus\source\repos\contin\contin\bin\Debug\contin.exe
+C:\Users\remus\source\repos\contin\contin\bin\Debug\contin.pdb
+C:\Users\remus\source\repos\contin\contin\obj\Debug\contin.Form1.resources
+C:\Users\remus\source\repos\contin\contin\obj\Debug\contin.exe
+C:\Users\remus\source\repos\contin\contin\obj\Debug\contin.pdb
