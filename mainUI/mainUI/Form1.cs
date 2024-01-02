@@ -170,7 +170,7 @@ namespace mainUI
         {
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
-
+            Process.Start("X:\\Windows\\System32\\PENetwork\\PENetwork.exe");
             net();
 
            
