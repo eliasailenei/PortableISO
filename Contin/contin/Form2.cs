@@ -116,7 +116,7 @@ namespace mainUI
                 //timer2.Start();
                 //sel.topass = topass;
                 //sel.ShowDialog();
-                Process.Start("DeployWindows.exe", "topass='" + topass + "' disks='" + disk[1] + "' isExpress='False'");
+                Process.Start("T:\\contin\\DeployWindows.exe", "topass='" + topass + "' disks='" + disk[1] + "' isExpress='False'");
             }
             else
             {
@@ -134,7 +134,7 @@ namespace mainUI
                 {
                     StartInfo = new ProcessStartInfo
                     {
-                        FileName = "DeployWindows.exe",
+                        FileName = "T:\\contin\\DeployWindows.exe",
                         Arguments = "topass='" + topass + "' disks='" + disk[1] + "' isExpress='True'",
                         UseShellExecute = true
                     }

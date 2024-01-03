@@ -22,6 +22,7 @@ namespace contin
     public partial class CustomDownload : Form
     {
         // Known issues - can't display the rest of the 8 missing programs, but minor
+        public string loc = "T:\\contin\\";
         static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
         static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
         static readonly IntPtr HWND_TOP = new IntPtr(0);
@@ -285,7 +286,7 @@ namespace contin
         {
             Process.Start(new ProcessStartInfo
             {
-                FileName = @"NiniteForCMD\NiniteForCMD.exe",
+                FileName = loc +@"NiniteForCMD\NiniteForCMD.exe",
                 Arguments = $"EXPORT ALL",
                 UseShellExecute = false,
                 CreateNoWindow = true
