@@ -68,7 +68,6 @@ namespace Portal
             }
 
             packagePath = packagePathBuilder.ToString();
-            File.WriteAllText("ocs.txt", packagePath);
         }
 
 
