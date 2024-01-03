@@ -49,6 +49,7 @@ namespace contin
         public string topass { get; set; }
         public Custome()
         {
+            // was about to rebuild everything lol, just forgot to assign the rectangles typical me
             InitializeComponent();
             SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
             FormBorderStyle = FormBorderStyle.None;
@@ -58,6 +59,11 @@ namespace contin
             bttn1 = new Rectangle(button1.Location, button1.Size);
             buttn2 = new Rectangle(button2.Location, button2.Size);
             buttn6 = new Rectangle(button6.Location, button6.Size);
+            listb1 = new Rectangle(listBox1.Location, listBox1.Size);
+            labl1 = new Rectangle(label1.Location, label1.Size);
+            labl2 = new Rectangle(label2.Location, label2.Size);
+            labl3 = new Rectangle(label3.Location, label3.Size);   
+            labl4 = new Rectangle(label4.Location, label4.Size);   
         }
         private void Rsize(object sender, EventArgs e)
         {
@@ -119,6 +125,7 @@ namespace contin
             if (iquit == DialogResult.Yes)
             {
                 MakeTXT();
+                this.Hide();
             }
             else
             {
@@ -150,7 +157,7 @@ namespace contin
                     @":SETUP_DONE" + Environment.NewLine +
                     @"del setup.exe" + Environment.NewLine +
                     @"del %0";
-            File.WriteAllText("C:\\Windows\\System32\\installer.bat", batchScript);
+            File.WriteAllText("T:\\contin\\installer.bat", batchScript);
             string xmlContent = @"<?xml version=""1.0"" encoding=""utf-8""?>" + Environment.NewLine +
      @"<unattend xmlns=""urn:schemas-microsoft-com:unattend"">" + Environment.NewLine +
      @"    <settings pass=""oobeSystem"">" + Environment.NewLine +
@@ -210,25 +217,22 @@ namespace contin
      @"    </settings>" + Environment.NewLine +
      @"<settings pass=""windowsPE"">" + Environment.NewLine +
      @"<component name=""Microsoft-Windows-International-Core-WinPE"" processorArchitecture=""amd64"" publicKeyToken=""31bf3856ad364e35"" language=""neutral"" versionScope=""nonSxS"" xmlns:wcm=""http://schemas.microsoft.com/WMIConfig/2002/State"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">" + Environment.NewLine +
-     @"<SetupUILanguage>" + Environment.NewLine +
-     @"<UILanguage>en-US</UILanguage>" + Environment.NewLine +
-     @"</SetupUILanguage>" + Environment.NewLine +
-     @"<InputLocale>en-US</InputLocale>" + Environment.NewLine +
-     @"<SystemLocale>en-US</SystemLocale>" + Environment.NewLine +
-     @"<UserLocale>en-US</UserLocale>" + Environment.NewLine +
+     @"    <SetupUILanguage>" + Environment.NewLine +
+     @"        <UILanguage>en-US</UILanguage>" + Environment.NewLine +
+     @"    </SetupUILanguage>" + Environment.NewLine +
+     @"    <InputLocale>0409:00000409</InputLocale>" + Environment.NewLine +
+     @"    <SystemLocale>en-US</SystemLocale>" + Environment.NewLine +
+     @"    <UILanguage>en-US</UILanguage>" + Environment.NewLine +
+     @"    <UILanguageFallback>en-US</UILanguageFallback>" + Environment.NewLine +
+     @"    <UserLocale>en-US</UserLocale>" + Environment.NewLine +
      @"</component>" + Environment.NewLine +
-     @"</settings>" + Environment.NewLine + 
+            @"</settings>" + Environment.NewLine + 
      @"</unattend>";
 
 
             string xmlLoc = "T:\\contin\\unattend.xml";
            File.WriteAllText(xmlLoc, xmlContent);
-           //// Clean clean = new Clean();
-           // clean.isExpress = true;
-           // clean.topass = topass;
-           // timer2.Start();
-           // clean.ShowDialog();
-           this.Close();
+            string content = "True";
         }
 
         private void timer1_Tick(object sender, EventArgs e)
