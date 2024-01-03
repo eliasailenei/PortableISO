@@ -70,24 +70,24 @@ namespace mainUI
         private void getLatest()
         {
             //This would get the latest version of required tool.
+            if (Directory.Exists("T:\\contin\\MSWISO"))
+            {
+                Directory.Delete("T:\\contin\\MSWISO", true);
+            }
+            Directory.CreateDirectory("T:\\contin\\MSWISO");
             using (var client = new WebClient())
             {
-                client.DownloadFile("https://github.com/eliasailenei/MSWISO/releases/download/Release/Stable.zip", "MSWISO.zip");
+                client.DownloadFile("https://github.com/eliasailenei/MSWISO/releases/download/Release/Stable.zip", "T:\\contin\\MSWISO.zip");
             }
-            if (Directory.Exists("MSWISO"))
-            {
-                Directory.Delete("MSWISO", true);
-            }
-            Directory.CreateDirectory("MSWISO");
-            ZipFile.ExtractToDirectory("MSWISO.zip", "MSWISO");
-            File.Delete("MSWISO.zip");
+            ZipFile.ExtractToDirectory("T:\\contin\\MSWISO.zip", "T:\\contin\\MSWISO");
+            File.Delete("T:\\contin\\MSWISO.zip");
             // Gets DeployWindows at the same time as it both uses MSWISO
             using (var client = new WebClient())
             {
-                client.DownloadFile("https://github.com/eliasailenei/DeployWindows/releases/download/Release/Program.zip", "DeployWindows.zip");
+                client.DownloadFile("https://github.com/eliasailenei/DeployWindows/releases/download/Release/Program.zip", "T:\\contin\\DeployWindows.zip");
             }
-            ZipFile.ExtractToDirectory("DeployWindows.zip", Environment.CurrentDirectory);
-            File.Delete("DeployWindows.zip");
+            ZipFile.ExtractToDirectory("T:\\contin\\DeployWindows.zip", "T:\\contin\\");
+            File.Delete("T:\\contin\\DeployWindows.zip");
         }
         
         private void OSSelect_Load_1(object sender, EventArgs e)

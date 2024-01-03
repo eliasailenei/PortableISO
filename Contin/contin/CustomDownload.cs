@@ -223,18 +223,18 @@ namespace contin
         }
         private void getLatest()
         {
+            if (Directory.Exists("T:\\contin\\NiniteForCMD"))
+            {
+                Directory.Delete("T:\\contin\\NiniteForCMD", true);
+            }
             //This would get the latest version of required tool.
             using (var client = new WebClient())
             {
-                client.DownloadFile("https://github.com/eliasailenei/NiniteForCMD/releases/download/Release/Program.zip", "NiniteForCMD.zip");
+                client.DownloadFile("https://github.com/eliasailenei/NiniteForCMD/releases/download/Release/Program.zip", "T:\\contin\\NiniteForCMD.zip");
             }
-            if (Directory.Exists("NiniteForCMD"))
-            {
-                Directory.Delete("NiniteForCMD", true);
-            }
-            Directory.CreateDirectory("NiniteForCMD");
-            ZipFile.ExtractToDirectory("NiniteForCMD.zip", "NiniteForCMD");
-            File.Delete("NiniteForCMD.zip");
+            Directory.CreateDirectory("T:\\contin\\NiniteForCMD");
+            ZipFile.ExtractToDirectory("T:\\contin\\NiniteForCMD.zip", "T:\\contin\\NiniteForCMD");
+            File.Delete("T:\\contin\\NiniteForCMD.zip");
         }
         private void Form1_Load(object sender, EventArgs e)
         {
