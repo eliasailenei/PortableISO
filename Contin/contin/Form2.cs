@@ -142,7 +142,7 @@ namespace mainUI
                 process.Start();
                 Thread formThread = new Thread(() =>
                 {
-                    CustomDownload customDownload = new CustomDownload();
+                    Username customDownload = new Username();
                 timer2.Start();
                 customDownload.ShowDialog();
                 });
