@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -166,13 +167,43 @@ namespace mainUI
             resize_Control(label8, shuttext);
         }
         bool ready;
+        private void isAble(bool b)
+        {
+            button1.Enabled = b;
+            button2.Enabled = b;    
+            button3.Enabled = b;
+            button4.Enabled = b;
+        }
+        private bool isFailedSetup()
+        {
+            if (Directory.Exists("T:\\contin"))
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
-            Process.Start("X:\\Windows\\System32\\PENetwork\\PENetwork.exe");
+            isAble(false);
+            label4.Text = "Loading drivers";
+            Process peDriver = new Process();
+            peDriver.StartInfo.FileName = "X:\\Windows\\System32\\PENetwork\\PENetwork.exe";
+            peDriver.StartInfo.UseShellExecute = false;
+            peDriver.StartInfo.CreateNoWindow = false;
+            peDriver.Start();
+            peDriver.WaitForExit();
+            isAble(true);
             net();
-
+            if (isFailedSetup())
+            {
+                ready = true;
+                button1.Text = ">>>>>>>>>>";
+                label4.Text = "Setup failed, continue for possible fix!";
+            }
            
         }
         private void net()
@@ -181,8 +212,6 @@ namespace mainUI
            
             if (!isReachable)
             {
-               
-                
                 label4.Text = "No network! Try Wi-Fi!";
                 button1.Text = "Try again";
             }
