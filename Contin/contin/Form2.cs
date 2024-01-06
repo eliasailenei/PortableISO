@@ -18,6 +18,7 @@ namespace mainUI
     {
         private Rectangle lab1, lab2, lab3, lab4, lab5, but1, but2;
        public string topass { get; set; }
+        public string language { get; set; }
        private string[] disk = Environment.GetCommandLineArgs();
 
 
@@ -142,8 +143,9 @@ namespace mainUI
                 process.Start();
                 Thread formThread = new Thread(() =>
                 {
-                    Username customDownload = new Username();
+                    CustomDownload customDownload = new CustomDownload();
                 timer2.Start();
+                    customDownload.language = language;
                 customDownload.ShowDialog();
                 });
                 formThread.SetApartmentState(ApartmentState.STA); // Set the thread's apartment state to STA for Windows Forms

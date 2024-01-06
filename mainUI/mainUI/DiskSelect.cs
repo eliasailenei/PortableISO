@@ -20,6 +20,7 @@ namespace mainUI
     {
         private Rectangle  labl1, labl2, labl3, buttn1, buttn2, buttn3, buttn4, buttn5, buttn6, buttn7, buttn8, labl8, labl5, buttn9;
         public bool isMBR;
+        public string systemLetter = "C";
         private Size original;
         string[] lists;
         int i;
@@ -84,7 +85,36 @@ namespace mainUI
             }
             Opacity += .4;
         }
+        public void checkLetter()
+        {
+            bool noDrive = false;
+            using (Process process = new Process())
+            {
+                process.StartInfo.FileName = "powershell";
+                process.StartInfo.Arguments = $"Get-Volume | Select-Object -ExpandProperty DriveLetter | Out-File -FilePath 'letters.txt'";
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+                process.WaitForExit();
+                string[] allDrives = File.ReadAllLines("letters.txt");
+                foreach (string drive in allDrives)
+                {
+                    if (drive == "C")
+                    {
+                        noDrive = true; 
+                        break;
+                    }   
+                }
+                if (noDrive)
+                {
+                    MessageBox.Show("Another Windows install was detected on the C drive! Please make sure you unmount or wipe other drives containing Windows as dual booting isn't supported yet!","DISK ERROR",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
+                }
+            }
+            
+        }
 
+            
         private void timer2_Tick(object sender, EventArgs e)
         {
             if (Opacity == 0)
@@ -125,7 +155,7 @@ namespace mainUI
         }
         private bool isFailedSetup()
         {
-            if (Directory.Exists("T:\\contin"))
+            if (Directory.Exists("T:\\contin") || Directory.Exists("D:\\contin"))
             {
                 return true;
             }
@@ -169,6 +199,7 @@ namespace mainUI
                     MessageBox.Show("No changes made");
                 }
             }
+            checkLetter();
         }
 
         private void button4_Click_1(object sender, EventArgs e)

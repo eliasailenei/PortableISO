@@ -176,7 +176,7 @@ namespace mainUI
         }
         private bool isFailedSetup()
         {
-            if (Directory.Exists("T:\\contin"))
+            if (Directory.Exists("T:\\contin") || Directory.Exists("D:\\contin"))
             {
                 return true;
             } else
@@ -202,7 +202,7 @@ namespace mainUI
             {
                 ready = true;
                 button1.Text = ">>>>>>>>>>";
-                label4.Text = "Setup failed, continue for possible fix!";
+                label4.Text = "Setup failed!";
             }
            
         }

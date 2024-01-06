@@ -38,6 +38,7 @@ namespace contin
 
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
         public string topass { get; set; }
+        public string language { get; set; }
         public string username = "PortableISO";
         public bool hasChanged = false;
         private Size form;
@@ -123,6 +124,7 @@ namespace contin
                 {
                     Password form = new Password();
                     form.username = username;
+                    form.language = language;
                     form.topass = topass;
                     timer2.Start();
                     form.ShowDialog();
@@ -139,6 +141,7 @@ namespace contin
             {
                 Password form = new Password();
                 form.username = username;
+                form.language = language;
                 form.topass = topass;
                 timer2.Start();
                 form.ShowDialog();

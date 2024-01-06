@@ -47,6 +47,8 @@ namespace contin
         public string password { get; set; }
         public string user { get; set; }
         public string topass { get; set; }
+        public string language { get; set; }
+        public string langCode, langLocale;
         public Custome()
         {
             // was about to rebuild everything lol, just forgot to assign the rectangles typical me
@@ -63,7 +65,7 @@ namespace contin
             labl1 = new Rectangle(label1.Location, label1.Size);
             labl2 = new Rectangle(label2.Location, label2.Size);
             labl3 = new Rectangle(label3.Location, label3.Size);   
-            labl4 = new Rectangle(label4.Location, label4.Size);   
+            labl4 = new Rectangle(label4.Location, label4.Size);
         }
         private void Rsize(object sender, EventArgs e)
         {
@@ -131,31 +133,59 @@ namespace contin
             {
             }
         }
+        private void setKeyboard(string langToSeach)
+        {
+            Dictionary<string, Tuple<string, string>> customLang = new Dictionary<string, Tuple<string, string>>();
+            customLang.Add("Arabic", Tuple.Create("ar-SA", "0401:00000401"));
+            customLang.Add("Bulgarian", Tuple.Create("bg-BG", "0419:00010419"));
+            customLang.Add("Czech", Tuple.Create("cs-CZ", "0405:00000405"));
+            customLang.Add("Danish", Tuple.Create("da-DK", "0406:00000406"));
+            customLang.Add("German", Tuple.Create("de-DE", "0407:00000407"));
+            customLang.Add("Greek", Tuple.Create("el-GR", "0408:00000408"));
+            customLang.Add("English", Tuple.Create("en-US", "0409:00000409"));
+            customLang.Add("Spanish", Tuple.Create("es-ES", "0C0A:0000100A"));
+            customLang.Add("Estonian", Tuple.Create("et-EE", "0425:00010425"));
+            customLang.Add("Finnish", Tuple.Create("fi-FI", "040B:0000040B"));
+            customLang.Add("French", Tuple.Create("fr-FR", "040C:0000040C"));
+            customLang.Add("Hebrew", Tuple.Create("he-IL", "040D:0000040D"));
+            customLang.Add("Croatian", Tuple.Create("hr-HR", "041A:0001041A"));
+            customLang.Add("Hungarian", Tuple.Create("hu-HU", "040E:0000040E"));
+            customLang.Add("Italian", Tuple.Create("it-IT", "0410:00000410"));
+            customLang.Add("Japanese", Tuple.Create("ja-JP", "0411:00000411"));
+            customLang.Add("Korean", Tuple.Create("ko-KR", "0412:00000412"));
+            customLang.Add("Lithuanian", Tuple.Create("lt-LT", "0427:00010427"));
+            customLang.Add("Latvian", Tuple.Create("lv-LV", "0426:00010426"));
+            customLang.Add("Dutch", Tuple.Create("nl-NL", "0413:00000413"));
+            customLang.Add("Norwegian", Tuple.Create("nb-NO", "0414:00000414"));
+            customLang.Add("Polish", Tuple.Create("pl-PL", "0415:00000415"));
+            customLang.Add("Romanian", Tuple.Create("ro-RO", "0418:00010418"));
+            customLang.Add("Russian", Tuple.Create("ru-RU", "0419:00010419"));
+            customLang.Add("Slovak", Tuple.Create("sk-SK", "041B:0001041B"));
+            customLang.Add("Slovenian", Tuple.Create("sl-SI", "0424:00010424"));
+            customLang.Add("Serbian", Tuple.Create("sr-RS", "0C1A:00010C1A"));
+            customLang.Add("Swedish", Tuple.Create("sv-SE", "041D:0000041D"));
+            customLang.Add("Thai", Tuple.Create("th-TH", "041E:0000041E"));
+            customLang.Add("Turkish", Tuple.Create("tr-TR", "041F:0000041F"));
+            customLang.Add("Ukrainian", Tuple.Create("uk-UA", "0422:00010422"));
+            if (customLang.ContainsKey(langToSeach))
+            {
+                langCode = customLang[langToSeach].Item1.ToString();
+                langLocale = customLang[langToSeach].Item2.ToString();
+            }
+        }
         private void MakeTXT()
         {
+            setKeyboard(language);
             int protect = 1;
             if (config[5] == true)
             {
                 protect = 3;
             }
             string batchScript = @"@echo off" + Environment.NewLine +
-                    @"setlocal" + Environment.NewLine +
-                    @"echo Dont panic! We are just setting up your Windows. This shouldn't take long..." + Environment.NewLine +
-                    @"echo." + Environment.NewLine + 
-                    @"echo Please DO NOT close this or you be stuck with looping install!" + Environment.NewLine +
-                    @"echo." + Environment.NewLine + 
-                    @"echo Step 1. Installing your software (you need to close it yourself)" + Environment.NewLine +
-                    @"echo." + Environment.NewLine + 
-                    @":CHECK_RUNNING" + Environment.NewLine +
-                    @"tasklist | find /i ""setup.exe"" > nul" + Environment.NewLine +
-                    @"if errorlevel 1 (" + Environment.NewLine +
-                    @"    goto SETUP_DONE" + Environment.NewLine +
-                    @") else (" + Environment.NewLine +
-                    @"    timeout /t 5 /nobreak > nul" + Environment.NewLine +
-                    @"    goto CHECK_RUNNING" + Environment.NewLine +
-                    @")" + Environment.NewLine +
-                    @":SETUP_DONE" + Environment.NewLine +
-                    @"del setup.exe" + Environment.NewLine +
+                    @"start /wait C:\Windows\Setup\Scripts\autorun.exe C:\Windows\Setup\Scripts\autorun.au3" + Environment.NewLine +
+                    @"del C:\Windows\Setup\Scripts\autorun.exe" + Environment.NewLine +
+                    @"del C:\Windows\Setup\Scripts\autorun.au3" + Environment.NewLine +
+                    @"del C:\Windows\Setup\Scripts\Ninite.exe" + Environment.NewLine +
                     @"del %0";
             File.WriteAllText("T:\\contin\\installer.bat", batchScript);
             string xmlContent = @"<?xml version=""1.0"" encoding=""utf-8""?>" + Environment.NewLine +
@@ -164,27 +194,9 @@ namespace contin
      @"        <component name=""Microsoft-Windows-Shell-Setup"" processorArchitecture=""amd64"" publicKeyToken=""31bf3856ad364e35"" language=""neutral"" versionScope=""nonSxS"" xmlns:wcm=""http://schemas.microsoft.com/WMIConfig/2002/State"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">" + Environment.NewLine +
      @"            <FirstLogonCommands>" + Environment.NewLine +
      @"                <SynchronousCommand wcm:action=""add"">" + Environment.NewLine +
-     @"                    <CommandLine>move T:\contin\Extras\setup.exe C:\Windows\System32\setup.exe</CommandLine>" + Environment.NewLine +
-     @"                    <Description>Moves your ninite setup to the root folder.</Description>" + Environment.NewLine +
-     @"                    <Order>1</Order>" + Environment.NewLine +
-     @"                    <RequiresUserInput>true</RequiresUserInput>" + Environment.NewLine +
-     @"                </SynchronousCommand>" + Environment.NewLine +
-     @"        <SynchronousCommand wcm:action=""add"">" + Environment.NewLine +
-     @"            <CommandLine>schtasks /create /tn RunInstaller /sc ONLOGON /ru Administrator /tr ""C:\Windows\System32\installer.bat""</CommandLine>" + Environment.NewLine +
-     @"            <Description>Create a logon script.</Description>" + Environment.NewLine +
-     @"            <Order>2</Order>" + Environment.NewLine +
-     @"            <RequiresUserInput>true</RequiresUserInput>" + Environment.NewLine +
-     @"        </SynchronousCommand>" + Environment.NewLine +
-     @"        <SynchronousCommand wcm:action=""add"">" + Environment.NewLine +
-     @"            <CommandLine>schtasks /change /tn RunInstaller /enabled true</CommandLine>" + Environment.NewLine +
-     @"            <Description>Enables the script.</Description>" + Environment.NewLine +
-     @"            <Order>3</Order>" + Environment.NewLine +
-     @"            <RequiresUserInput>true</RequiresUserInput>" + Environment.NewLine +
-     @"        </SynchronousCommand>" + Environment.NewLine +
-     @"                <SynchronousCommand wcm:action=""add"">" + Environment.NewLine +
      @"                    <CommandLine>C:\tempdelete.bat</CommandLine>" + Environment.NewLine +
      @"                    <Description>Deletes the T: or D: drive</Description>" + Environment.NewLine +
-     @"                    <Order>4</Order>" + Environment.NewLine +
+     @"                    <Order>1</Order>" + Environment.NewLine +
      @"                    <RequiresUserInput>true</RequiresUserInput>" + Environment.NewLine +
      @"                </SynchronousCommand>" + Environment.NewLine +
      @"            </FirstLogonCommands>" + Environment.NewLine +
@@ -217,11 +229,11 @@ namespace contin
      @"    </settings>" + Environment.NewLine +
      @"<settings pass=""windowsPE"">" + Environment.NewLine +
      @"<component name=""Microsoft-Windows-International-Core-WinPE"" processorArchitecture=""amd64"" publicKeyToken=""31bf3856ad364e35"" language=""neutral"" versionScope=""nonSxS"" xmlns:wcm=""http://schemas.microsoft.com/WMIConfig/2002/State"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">" + Environment.NewLine +
-     @"    <InputLocale>0409:00000409</InputLocale>" + Environment.NewLine +
-     @"    <SystemLocale>en-US</SystemLocale>" + Environment.NewLine +
-     @"    <UILanguage>en-US</UILanguage>" + Environment.NewLine +
+     @"    <InputLocale>" + langLocale + "</InputLocale>" + Environment.NewLine +
+     @"    <SystemLocale>" + langCode + "</SystemLocale>" + Environment.NewLine +
+     @"    <UILanguage>" + langCode + "</UILanguage>" + Environment.NewLine +
      @"    <UILanguageFallback>en-US</UILanguageFallback>" + Environment.NewLine +
-     @"    <UserLocale>en-US</UserLocale>" + Environment.NewLine +
+     @"    <UserLocale>" + langCode + "</UserLocale>" + Environment.NewLine +
      @"</component>" + Environment.NewLine +
             @"</settings>" + Environment.NewLine + 
      @"</unattend>";
@@ -229,7 +241,6 @@ namespace contin
 
             string xmlLoc = "T:\\contin\\unattend.xml";
            File.WriteAllText(xmlLoc, xmlContent);
-            string content = "True";
         }
 
         private void timer1_Tick(object sender, EventArgs e)

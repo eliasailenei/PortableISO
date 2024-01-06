@@ -19,16 +19,13 @@ namespace mainUI
 {
     public partial class OSSelect : Form
     {
-        private bool bools;
         private int ver;
         DataTable Windows;
         private Rectangle lab1, lab2, lab3, lab4, lab6, lab8, but3, but4,  but6, but7, list1, list2;
         private Size form;
-        private string rel;
-        private string toPass;
-        private int lol;
+        private bool notAdded = true;
+        private string rel, toPass;
         private string ISODown = @"T:\contin\";
-        private string[] isSame;
         
         public OSSelect()
         {
@@ -70,10 +67,10 @@ namespace mainUI
         private void getLatest()
         {
             //This would get the latest version of required tool.
-            if (Directory.Exists("T:\\contin\\MSWISO"))
-            {
-                Directory.Delete("T:\\contin\\MSWISO", true);
-            }
+            //if (Directory.Exists("T:\\contin\\MSWISO"))
+            //{
+            //    Directory.Delete("T:\\contin\\MSWISO", true);
+            ////}
             Directory.CreateDirectory("T:\\contin\\MSWISO");
             using (var client = new WebClient())
             {
@@ -132,11 +129,22 @@ namespace mainUI
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            rel = listBox1.SelectedItem.ToString();
-            string[] languageArray = { "Arabic", "Bulgarian", "Czech", "Danish", "German", "Greek", "English", "Spanish", "Estonian", "Finnish", "French", "Hebrew", "Croatian", "Hungarian", "Italian", "Japanese", "Korean", "Lithuanian", "Latvian", "Dutch", "Norwegian", "Polish", "Romanian", "Russian", "Slovak", "Slovenian", "Serbian", "Swedish", "Thai", "Turkish", "Ukrainian" };
-            listBox2.Items.Clear();
-            listBox2.Items.AddRange(languageArray);
+            try
+            {
+                rel = listBox1.SelectedItem.ToString();
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString() + " due to empty space being clicked. Error is ignored as it is not critical.");
+            }
+            if (notAdded)
+            {
+                notAdded = false;
+                string[] languageArray = { "Arabic", "Bulgarian", "Czech", "Danish", "German", "Greek", "English", "Spanish", "Estonian", "Finnish", "French", "Hebrew", "Croatian", "Hungarian", "Italian", "Japanese", "Korean", "Lithuanian", "Latvian", "Dutch", "Norwegian", "Polish", "Romanian", "Russian", "Slovak", "Slovenian", "Serbian", "Swedish", "Thai", "Turkish", "Ukrainian" };
+                listBox2.Items.Clear();
+                listBox2.Items.AddRange(languageArray);
+            }
         }
+  
         private void OSSelect_rsize(object sender, EventArgs e)
         {
             resizeControl(lab1, label1);
@@ -234,9 +242,9 @@ namespace mainUI
 
             
                 toPass = @"--ESDMode=True --Location=" + ISODown + " --WinVer=Windows_" + ver + " --Release=" + argsFormat(rel) + " --Language=" + listBox2.SelectedItem.ToString();
-            MessageBox.Show(toPass);
             timer2.Start();
             sel.topass = toPass;
+            sel.language = listBox2.SelectedItem.ToString();
             sel.ShowDialog();
         }
     }
