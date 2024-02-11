@@ -1,0 +1,15 @@
+C:\Users\remus\source\repos\SetupGUI\SetupGUI\bin\Debug\SetupGUI.exe.config
+C:\Users\remus\source\repos\SetupGUI\SetupGUI\bin\Debug\SetupGUI.exe
+C:\Users\remus\source\repos\SetupGUI\SetupGUI\bin\Debug\SetupGUI.pdb
+C:\Users\remus\source\repos\SetupGUI\SetupGUI\obj\Debug\SetupGUI.csproj.AssemblyReference.cache
+C:\Users\remus\source\repos\SetupGUI\SetupGUI\obj\Debug\SetupGUI.Properties.Resources.resources
+C:\Users\remus\source\repos\SetupGUI\SetupGUI\obj\Debug\SetupGUI.csproj.GenerateResource.cache
+C:\Users\remus\source\repos\SetupGUI\SetupGUI\obj\Debug\SetupGUI.csproj.CoreCompileInputs.cache
+C:\Users\remus\source\repos\SetupGUI\SetupGUI\obj\Debug\SetupGUI.exe
+C:\Users\remus\source\repos\SetupGUI\SetupGUI\obj\Debug\SetupGUI.pdb
+C:\Users\remus\source\repos\SetupGUI\SetupGUI\obj\Debug\SetupGUI.Form2.resources
+C:\Users\remus\source\repos\SetupGUI\SetupGUI\obj\Debug\SetupGUI.ModeOfInstall.resources
+C:\Users\remus\source\repos\SetupGUI\SetupGUI\obj\Debug\SetupGUI.Download.resources
+C:\Users\remus\source\repos\SetupGUI\SetupGUI\obj\Debug\SetupGUI.Disk_Mode.resources
+C:\Users\remus\source\repos\SetupGUI\SetupGUI\obj\Debug\SetupGUI.CreateImagecs.resources
+C:\Users\remus\source\repos\SetupGUI\SetupGUI\obj\Debug\SetupGUI.VM.resources
