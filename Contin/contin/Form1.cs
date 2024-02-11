@@ -19,11 +19,10 @@ namespace contin
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
-           mainUI.OSSelect change = new mainUI.OSSelect();
-           change.ShowDialog();
-           this.Close();
 
+          mainUI.OSSelect change = new mainUI.OSSelect();
+            change.ShowDialog();
+            this.Close();
         }
     }
 }

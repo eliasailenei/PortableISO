@@ -49,11 +49,12 @@ namespace Portal
             richTextBox1.AppendText("- Image will be saved at: " + exportFolder + "\n");
 
             string[] ocPackages = {
+        "WinPE-Scripting",
         "WinPE-WMI",
         "WinPE-NetFx",
-        "WinPE-Scripting",
         "WinPE-PowerShell",
         "WinPE-DismCmdlets",
+        "WinPE-StorageWMI",
     };
 
             foreach (string ocPackage in ocPackages)

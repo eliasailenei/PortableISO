@@ -41,6 +41,7 @@ namespace contin
         private Rectangle labl2, bttn1, txtb1, txtb2, buttn6;
         public string username { get; set; }
         public string topass { get; set; }
+        public string language { get; set; }
         public Password()
         {
             InitializeComponent();
@@ -109,6 +110,7 @@ namespace contin
             {
                Custome form = new Custome();
                 form.user = username;
+                form.language = language;
                 form.password = password;
                 form.topass = topass;
                 timer2.Start();

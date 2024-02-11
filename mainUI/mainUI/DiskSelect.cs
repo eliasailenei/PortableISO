@@ -18,7 +18,9 @@ namespace mainUI
     
     public partial class DiskSelect : Form
     {
-        private Rectangle  labl1, labl2, labl3, buttn1, buttn2, buttn3, buttn4, buttn5, buttn6, buttn7, buttn8, labl8, labl5;
+        private Rectangle  labl1, labl2, labl3, buttn1, buttn2, buttn3, buttn4, buttn5, buttn6, buttn7, buttn8, labl8, labl5, buttn9;
+        public bool isMBR;
+        public string systemLetter = "C";
         private Size original;
         string[] lists;
         int i;
@@ -38,6 +40,7 @@ namespace mainUI
              buttn5 = new Rectangle(button5.Location, button5.Size);
              buttn6 = new Rectangle(button6.Location, button6.Size);
              buttn7 = new Rectangle(button7.Location, button7.Size);
+            buttn9 = new Rectangle(button9.Location, button9.Size);
             buttn8 = new Rectangle(button8.Location, button8.Size);
             labl8 = new Rectangle(label8.Location, label8.Size);
             labl5 = new Rectangle(label5.Location, label5.Size);
@@ -57,6 +60,7 @@ namespace mainUI
             resizeControl(labl2, label2);
             resizeControl(labl1, label1);
             resizeControl(labl5, label5);
+            resizeControl(buttn9, button9);
 
         }
         private void resizeControl(Rectangle r, Control c)
@@ -81,7 +85,36 @@ namespace mainUI
             }
             Opacity += .4;
         }
+        public void checkLetter()
+        {
+            bool noDrive = false;
+            using (Process process = new Process())
+            {
+                process.StartInfo.FileName = "powershell";
+                process.StartInfo.Arguments = $"Get-Volume | Select-Object -ExpandProperty DriveLetter | Out-File -FilePath 'letters.txt'";
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+                process.WaitForExit();
+                string[] allDrives = File.ReadAllLines("letters.txt");
+                foreach (string drive in allDrives)
+                {
+                    if (drive == "C")
+                    {
+                        noDrive = true; 
+                        break;
+                    }   
+                }
+                if (noDrive)
+                {
+                    MessageBox.Show("Another Windows install was detected on the C drive! Please make sure you unmount or wipe other drives containing Windows as dual booting isn't supported yet!","DISK ERROR",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
+                }
+            }
+            
+        }
 
+            
         private void timer2_Tick(object sender, EventArgs e)
         {
             if (Opacity == 0)
@@ -120,12 +153,23 @@ namespace mainUI
             }
                 
         }
-
+        private bool isFailedSetup()
+        {
+            if (Directory.Exists("T:\\contin") || Directory.Exists("D:\\contin"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         private void DiskSelect_Load(object sender, EventArgs e)
         {
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
             label3.Visible = false;
+            button9.Text = "Change to MBR";
             try
             {
                 File.Delete("diskinfo.txt");
@@ -134,7 +178,28 @@ namespace mainUI
             catch (Exception ex)
             {
             }
-
+            if (isFailedSetup())
+            {
+                var errorBox = MessageBox.Show("It looks like the attempt to boot to Windows has failed. This is mainly due to your computer having a BIOS and not a UEFI system which mainly occurs on old PC's\\VM's. If you have the option to change to a EFI/UEFI system in the BIOS or just want to close your computer click Abort and be shut down. If you want to try to use MBR which might the fix the problem click Retry (only limited to 4TB per drive). To continue using a GPT drive, click Ignore.", "CRITICAL ERROR", MessageBoxButtons.AbortRetryIgnore,MessageBoxIcon.Error);
+                if (errorBox == DialogResult.Abort)
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = @"wpeutil.exe",
+                        Arguments = $"shutdown",
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    });
+                } else if (errorBox == DialogResult.Retry)
+                {
+                    isMBR = true;
+                    button9.Text = "Switch to GPT";
+                } else
+                {
+                    MessageBox.Show("No changes made");
+                }
+            }
+            checkLetter();
         }
 
         private void button4_Click_1(object sender, EventArgs e)
@@ -212,6 +277,27 @@ namespace mainUI
             CheckWhat(sender, e);
         }
 
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if (!isMBR)
+            {
+                var bx = MessageBox.Show("Are you sure you want to use a MBR drive?", "CONFIRM",MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (bx == DialogResult.Yes)
+                {
+                    isMBR = true;
+                    button9.Text = "Change to GPT";
+                }
+            } else if (isMBR)
+            {
+                var bx = MessageBox.Show("Are you sure you want to use a GPT drive?", "CONFIRM", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (bx == DialogResult.Yes)
+                {
+                    isMBR = false;
+                    button9.Text = "Change to MBR";
+                }
+            }
+        }
+
         private void label3_Click(object sender, EventArgs e)
         {
 
@@ -280,9 +366,11 @@ namespace mainUI
         }
         private void DriveMake()
         {
-
+            string scriptContent = " ";
             string filePath = @"X:\clear.txt";
-            string scriptContent = "select disk " + diskNum + Environment.NewLine +
+            if (!isMBR)
+            {
+                scriptContent = "select disk " + diskNum + Environment.NewLine +
                                    "clean" + Environment.NewLine +
                                    "convert gpt" + Environment.NewLine +
                                    "create partition primary" + Environment.NewLine +
@@ -294,7 +382,23 @@ namespace mainUI
                                    "assign letter=T" + Environment.NewLine +
                                    "shrink desired=512" + Environment.NewLine +
                                    "create partition efi size=512" + Environment.NewLine +
-                                   "format quick fs=fat32 label=EFI" + Environment.NewLine ;
+                                   "format quick fs=fat32 label=EFI" + Environment.NewLine;
+            } else if (isMBR)
+            {
+                       scriptContent = "select disk " + diskNum + Environment.NewLine +
+                       "clean" + Environment.NewLine +
+                       "convert mbr" + Environment.NewLine +
+                       "create partition primary" + Environment.NewLine +
+                       "format fs=ntfs label=System quick" + Environment.NewLine +
+                       "assign letter=C" + Environment.NewLine +
+                       "shrink desired=20000" + Environment.NewLine +
+                       "create partition primary" + Environment.NewLine +
+                       "format fs=ntfs label=Temp quick" + Environment.NewLine +
+                       "assign letter=T" + Environment.NewLine;
+
+            }
+
+
 
             File.WriteAllText(filePath, scriptContent);
 

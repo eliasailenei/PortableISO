@@ -22,3 +22,15 @@ C:\Users\remus\OneDrive\Documents\GitHub\PortableISO\mainUI\mainUI\obj\x64\Debug
 C:\Users\remus\OneDrive\Documents\GitHub\PortableISO\mainUI\mainUI\obj\x64\Debug\mainUI.csproj.CoreCompileInputs.cache
 C:\Users\remus\OneDrive\Documents\GitHub\PortableISO\mainUI\mainUI\obj\x64\Debug\mainUI.exe
 C:\Users\remus\OneDrive\Documents\GitHub\PortableISO\mainUI\mainUI\obj\x64\Debug\mainUI.pdb
+C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\bin\x64\Debug\mainUI.exe.config
+C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\bin\x64\Debug\mainUI.exe
+C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\bin\x64\Debug\mainUI.pdb
+C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\obj\x64\Debug\mainUI.csproj.AssemblyReference.cache
+C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\obj\x64\Debug\mainUI.Confirm.resources
+C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\obj\x64\Debug\mainUI.DiskSelect.resources
+C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\obj\x64\Debug\mainUI.Form1.resources
+C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\obj\x64\Debug\mainUI.Properties.Resources.resources
+C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\obj\x64\Debug\mainUI.csproj.GenerateResource.cache
+C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\obj\x64\Debug\mainUI.csproj.CoreCompileInputs.cache
+C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\obj\x64\Debug\mainUI.exe
+C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\obj\x64\Debug\mainUI.pdb
