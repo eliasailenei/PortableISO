@@ -10,12 +10,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.NetworkInformation;
 using System.Diagnostics;
+using CustomConfig;
+using System.Xml.Linq;
+
 namespace mainUI
 {
     public partial class Form1 : Form
     {
         private Size original;
-        private Rectangle image1, maintext, subtext, credit, pleasewait, buttoncontinue, wifi, wifitext, dis, distext, shut, shuttext;
+        SQLCheck sql = new SQLCheck();
+        private Rectangle image1, maintext, subtext, credit, pleasewait, buttoncontinue, wifi, wifitext, dis, distext, shut, shuttext, autobttn, autotext;
         private string winxshell = @"X:\Windows\System32\WinXShell";
         public Form1()
         {
@@ -34,6 +38,8 @@ namespace mainUI
             distext = new Rectangle(label6.Location, label6.Size);
             shuttext = new Rectangle(label8.Location, label8.Size);
             shut = new Rectangle(button4.Location, button4.Size);
+            autobttn = new Rectangle(button5.Location, button5.Size);   
+            autotext = new Rectangle(label5.Location, label5.Size);
 
         }
         private void resize_Control(Control c, Rectangle r)
@@ -79,7 +85,7 @@ namespace mainUI
                 showDiag.InteractionComplete += (s, args) =>
                 {
                     showDiag.Hide();
-                    DiskSelect sel = new DiskSelect();
+                    DiskSelect sel = new DiskSelect(sql);
                     timer2.Start();
                     sel.ShowDialog();
                 };
@@ -102,6 +108,25 @@ namespace mainUI
                 this.Hide();
             }
             Opacity -= .4;
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            XML showDiag = new XML();
+            int centerX = (Screen.PrimaryScreen.Bounds.Width - showDiag.Width) / 2;
+            int centerY = (Screen.PrimaryScreen.Bounds.Height - showDiag.Height) / 2;
+            showDiag.Location = new Point(centerX, centerY);
+            this.Controls.Add(showDiag);
+            showDiag.sql = sql;
+            showDiag.BringToFront();
+            showDiag.Show();
+            showDiag.InteractionComplete += (s, args) =>
+            {
+                showDiag.Hide();
+                DiskSelect sel = new DiskSelect(sql);
+                timer2.Start();
+                sel.ShowDialog();
+            };
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -148,7 +173,7 @@ namespace mainUI
 
         private void label5_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         private void Form1_rsize(object sender, EventArgs e)
@@ -165,6 +190,8 @@ namespace mainUI
             resize_Control(label6, distext);
             resize_Control(label7, wifitext);
             resize_Control(label8, shuttext);
+            resize_Control(button5, autobttn);
+            resize_Control(label5, autotext);
         }
         bool ready;
         private void isAble(bool b)
@@ -190,12 +217,43 @@ namespace mainUI
             WindowState = FormWindowState.Maximized;
             isAble(false);
             label4.Text = "Loading drivers";
-            Process peDriver = new Process();
-            peDriver.StartInfo.FileName = "X:\\Windows\\System32\\PENetwork\\PENetwork.exe";
-            peDriver.StartInfo.UseShellExecute = false;
-            peDriver.StartInfo.CreateNoWindow = false;
-            peDriver.Start();
-            peDriver.WaitForExit();
+            try
+            {
+                Process peDriver = new Process();
+                peDriver.StartInfo.FileName = "X:\\Windows\\System32\\PENetwork\\PENetwork.exe";
+                peDriver.StartInfo.UseShellExecute = false;
+                peDriver.StartInfo.CreateNoWindow = false;
+                peDriver.Start();
+                peDriver.WaitForExit();
+            }
+            catch { 
+                if (sql.getScriptExistance())
+                {
+                    if (sql.xmlStatus() == false)
+                    {
+                        XML showDiag = new XML();
+                        int centerX = (Screen.PrimaryScreen.Bounds.Width - showDiag.Width) / 2;
+                        int centerY = (Screen.PrimaryScreen.Bounds.Height - showDiag.Height) / 2;
+                        showDiag.Location = new Point(centerX, centerY);
+                        this.Controls.Add(showDiag);
+                        showDiag.sql = sql;
+                        showDiag.BringToFront();
+                        showDiag.Show();
+                        showDiag.InteractionComplete += (s, args) =>
+                        {
+                            showDiag.Hide();
+                            DiskSelect sel = new DiskSelect(sql);
+                            timer2.Start();
+                            sel.ShowDialog();
+                        };
+                    }
+                }
+                
+                
+
+
+            }
+           
             isAble(true);
             net();
             if (isFailedSetup())

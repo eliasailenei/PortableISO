@@ -12,21 +12,24 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
-
+using CustomConfig;
 namespace mainUI
 {
     
     public partial class DiskSelect : Form
     {
-        private Rectangle  labl1, labl2, labl3, buttn1, buttn2, buttn3, buttn4, buttn5, buttn6, buttn7, buttn8, labl8, labl5, buttn9;
+        private Rectangle  labl1, labl2, labl3, buttn1, buttn2, buttn3, buttn4, buttn5, buttn6, buttn7, buttn8, labl8, labl5, buttn9, bttn10;
         public bool isMBR;
+        public SQLCheck sql;
+        public DriveLetters drive = new DriveLetters();
         public string systemLetter = "C";
         private Size original;
         string[] lists;
         int i;
         int diskNum = 0;
-        public DiskSelect()
+        public DiskSelect(SQLCheck newSQL)
         {
+            sql = newSQL;
             InitializeComponent();
             this.Resize += DiskSelect_resiz;
             original = this.Size;
@@ -42,6 +45,7 @@ namespace mainUI
              buttn7 = new Rectangle(button7.Location, button7.Size);
             buttn9 = new Rectangle(button9.Location, button9.Size);
             buttn8 = new Rectangle(button8.Location, button8.Size);
+            bttn10 = new Rectangle(button10.Location, button10.Size);
             labl8 = new Rectangle(label8.Location, label8.Size);
             labl5 = new Rectangle(label5.Location, label5.Size);
         }
@@ -61,6 +65,7 @@ namespace mainUI
             resizeControl(labl1, label1);
             resizeControl(labl5, label5);
             resizeControl(buttn9, button9);
+            resizeControl(bttn10, button10);
 
         }
         private void resizeControl(Rectangle r, Control c)
@@ -85,34 +90,7 @@ namespace mainUI
             }
             Opacity += .4;
         }
-        public void checkLetter()
-        {
-            bool noDrive = false;
-            using (Process process = new Process())
-            {
-                process.StartInfo.FileName = "powershell";
-                process.StartInfo.Arguments = $"Get-Volume | Select-Object -ExpandProperty DriveLetter | Out-File -FilePath 'letters.txt'";
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.CreateNoWindow = true;
-                process.Start();
-                process.WaitForExit();
-                string[] allDrives = File.ReadAllLines("letters.txt");
-                foreach (string drive in allDrives)
-                {
-                    if (drive == "C")
-                    {
-                        noDrive = true; 
-                        break;
-                    }   
-                }
-                if (noDrive)
-                {
-                    MessageBox.Show("Another Windows install was detected on the C drive! Please make sure you unmount or wipe other drives containing Windows as dual booting isn't supported yet!","DISK ERROR",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
-                }
-            }
-            
-        }
+        
 
             
         private void timer2_Tick(object sender, EventArgs e)
@@ -133,18 +111,18 @@ namespace mainUI
                 Cursor.Current = Cursors.WaitCursor;
                 DriveMake();
                 timer2.Start();
-                if (Directory.Exists("T:\\contin"))
+                if (Directory.Exists(drive.TLetter.ToString() + "contin"))
                 {
-                    Directory.Delete("T:\\contin", true);
+                    Directory.Delete(drive.TLetter.ToString() + "contin", true);
                 }
-                Directory.CreateDirectory("T:\\contin");
+                Directory.CreateDirectory(drive.TLetter.ToString() + "contin");
                 using (var client = new WebClient())
                 {
-                    client.DownloadFile("https://github.com/eliasailenei/PortableISO/releases/download/Contin/Release.zip", "T:\\contin\\contin.zip");
+                    client.DownloadFile("https://github.com/eliasailenei/PortableISO/releases/download/Contin/Release.zip", drive.TLetter.ToString() + "contin\\contin.zip");
                 }
-                ZipFile.ExtractToDirectory("T:\\contin\\contin.zip", "T:\\contin");
-                File.Delete("T:\\contin\\contin.zip");
-                Process.Start("T:\\contin\\contin.exe", diskNum.ToString());
+                ZipFile.ExtractToDirectory(drive.TLetter.ToString() + "contin\\contin.zip", drive.TLetter.ToString() + "contin");
+                File.Delete(drive.TLetter.ToString() + "contin\\contin.zip");
+                Process.Start(drive.TLetter.ToString() + "contin\\contin.exe", diskNum.ToString());
                 this.Hide();
             }
             else
@@ -155,7 +133,7 @@ namespace mainUI
         }
         private bool isFailedSetup()
         {
-            if (Directory.Exists("T:\\contin") || Directory.Exists("D:\\contin"))
+            if (Directory.Exists(drive.TLetter.ToString() + "contin") || Directory.Exists("D:\\contin"))
             {
                 return true;
             }
@@ -164,8 +142,9 @@ namespace mainUI
                 return false;
             }
         }
-        private void DiskSelect_Load(object sender, EventArgs e)
+        private async void DiskSelect_Load(object sender, EventArgs e)
         {
+            button10.Text = "Dual Boot";
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
             label3.Visible = false;
@@ -199,7 +178,29 @@ namespace mainUI
                     MessageBox.Show("No changes made");
                 }
             }
-            checkLetter();
+            if (await drive.LetterCollision())
+            {
+                DualBoot showDiag = new DualBoot();
+                int centerX = (Screen.PrimaryScreen.Bounds.Width - showDiag.Width) / 2;
+                int centerY = (Screen.PrimaryScreen.Bounds.Height - showDiag.Height) / 2;
+                showDiag.Location = new Point(centerX, centerY);
+                this.Controls.Add(showDiag);
+                showDiag.drive = drive;
+                showDiag.intent = true;
+                showDiag.BringToFront();
+                showDiag.Show();
+                showDiag.InteractionComplete += (s, args) =>
+                {
+                    showDiag.Hide();
+                };
+            }
+            if (sql.xmlStatus() && !String.IsNullOrEmpty(sql.diskNumber))
+            {
+                MessageBox.Show(sql.diskNumber);
+            } else
+            {
+                MessageBox.Show("You wasted your time idiot");
+            }
         }
 
         private void button4_Click_1(object sender, EventArgs e)
@@ -298,6 +299,23 @@ namespace mainUI
             }
         }
 
+        private void button10_Click(object sender, EventArgs e)
+        {
+            DualBoot showDiag = new DualBoot();
+            int centerX = (Screen.PrimaryScreen.Bounds.Width - showDiag.Width) / 2;
+            int centerY = (Screen.PrimaryScreen.Bounds.Height - showDiag.Height) / 2;
+            showDiag.Location = new Point(centerX, centerY);
+            this.Controls.Add(showDiag);
+            showDiag.drive = drive;
+            showDiag.intent = false;
+            showDiag.BringToFront();
+            showDiag.Show();
+            showDiag.InteractionComplete += (s, args) =>
+            {
+                showDiag.Hide();
+            };
+        }
+
         private void label3_Click(object sender, EventArgs e)
         {
 
@@ -375,11 +393,11 @@ namespace mainUI
                                    "convert gpt" + Environment.NewLine +
                                    "create partition primary" + Environment.NewLine +
                                    "format fs=ntfs label=System quick" + Environment.NewLine +
-                                   "assign letter=C" + Environment.NewLine +
+                                   "assign letter=" + drive.CLetter.ToString() + Environment.NewLine +
                                    "shrink desired=20000 " + Environment.NewLine +
                                    "create partition primary size=20000" + Environment.NewLine +
                                    "format fs=ntfs label=Temp quick" + Environment.NewLine +
-                                   "assign letter=T" + Environment.NewLine +
+                                   "assign letter=" + drive.TLetter.ToString() + Environment.NewLine +
                                    "shrink desired=512" + Environment.NewLine +
                                    "create partition efi size=512" + Environment.NewLine +
                                    "format quick fs=fat32 label=EFI" + Environment.NewLine;
@@ -390,10 +408,10 @@ namespace mainUI
                        "convert mbr" + Environment.NewLine +
                        "create partition primary" + Environment.NewLine +
                        "format fs=ntfs label=System quick" + Environment.NewLine +
-                       "assign letter=C" + Environment.NewLine +
+                       "assign letter=" + drive.CLetter.ToString() + Environment.NewLine +
                        "shrink desired=20000" + Environment.NewLine +
                        "create partition primary" + Environment.NewLine +
-                       "format fs=ntfs label=Temp quick" + Environment.NewLine +
+                       "assign letter=" + drive.TLetter.ToString() + Environment.NewLine +
                        "assign letter=T" + Environment.NewLine;
 
             }
