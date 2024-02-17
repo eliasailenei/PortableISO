@@ -1,8 +1,9 @@
+[paypal]: https://paypal.me/eliasppl
+[setup]: https://github.com/eliasailenei/PortableISO/releases/download/Portal/Release.zip
+[iso]: https://github.com/eliasailenei/PortableISO/releases/download/V2/release.iso
 # PortableISO
-
-Welcome to the PortableISO repo! This is an ongoing repo that allows you to download Windows online from storage medium as small as a CD-ROM!
-
-# Big thanks to:
-- 7-zip
-- [Database](https://files.rg-adguard.net/)https://files.rg-adguard.net/
-- rgadguard on twitter
+![image](https://github.com/eliasailenei/PortableISO/assets/82527761/4f98a5b1-0e0c-4642-98ea-391d2cad437d)
+## Get started
+### You have two options:
+#### You can use the setup made by me [here][setup], you will need to extract the zip file into a folder and run it. From here, you can also make your own WinPE image or get access to EXMLE to automate your install.
+#### You can also get the [ISO image][iso] if you prefer to use this with Rufus or a virtual machine (more on this later).
