@@ -14,21 +14,27 @@ using System.Runtime.Remoting.Lifetime;
 using System.Threading;
 using System.Net;
 using System.IO.Compression;
-
+using CustomConfig;
 namespace mainUI
 {
     public partial class OSSelect : Form
     {
         private int ver;
         DataTable Windows;
+        SQLCheck sql;
+        DriveLetters drive;
         private Rectangle lab1, lab2, lab3, lab4, lab6, lab8, but3, but4,  but6, but7, list1, list2;
         private Size form;
+        public bool auto;
         private bool notAdded = true;
         private string rel, toPass;
-        private string ISODown = @"T:\contin\";
+        private string ISODown;
         
-        public OSSelect()
+        public OSSelect(SQLCheck sqls, DriveLetters drives)
         {
+            this.sql = sqls;    
+            this.drive = drives;
+            ISODown = drive.TLetter.ToString() + ":\\contin\\";
             InitializeComponent();
             pictureBox1.Visible = false;
            FormBorderStyle = FormBorderStyle.None;
@@ -67,24 +73,24 @@ namespace mainUI
         private void getLatest()
         {
             //This would get the latest version of required tool.
-            //if (Directory.Exists("T:\\contin\\MSWISO"))
-            //{
-            //    Directory.Delete("T:\\contin\\MSWISO", true);
-            ////}
-            Directory.CreateDirectory("T:\\contin\\MSWISO");
+            if (Directory.Exists(drive.TLetter.ToString() + ":\\contin\\MSWISO"))
+            {
+                Directory.Delete(drive.TLetter.ToString() + ":\\contin\\MSWISO", true);
+            }
+            Directory.CreateDirectory(drive.TLetter.ToString() + ":\\contin\\MSWISO");
             using (var client = new WebClient())
             {
-                client.DownloadFile("https://github.com/eliasailenei/MSWISO/releases/download/Release/Stable.zip", "T:\\contin\\MSWISO.zip");
+                client.DownloadFile("https://github.com/eliasailenei/MSWISO/releases/download/Release/Stable.zip", drive.TLetter.ToString() + ":\\contin\\MSWISO.zip");
             }
-            ZipFile.ExtractToDirectory("T:\\contin\\MSWISO.zip", "T:\\contin\\MSWISO");
-            File.Delete("T:\\contin\\MSWISO.zip");
+            ZipFile.ExtractToDirectory(drive.TLetter.ToString() + ":\\contin\\MSWISO.zip", drive.TLetter.ToString() + ":\\contin\\MSWISO");
+            File.Delete(drive.TLetter.ToString() + ":\\contin\\MSWISO.zip");
             // Gets DeployWindows at the same time as it both uses MSWISO
             using (var client = new WebClient())
             {
-                client.DownloadFile("https://github.com/eliasailenei/DeployWindows/releases/download/Release/Program.zip", "T:\\contin\\DeployWindows.zip");
+                client.DownloadFile("https://github.com/eliasailenei/DeployWindows/releases/download/Release/Program.zip", drive.TLetter.ToString() + ":\\contin\\DeployWindows.zip");
             }
-            ZipFile.ExtractToDirectory("T:\\contin\\DeployWindows.zip", "T:\\contin\\");
-            File.Delete("T:\\contin\\DeployWindows.zip");
+            ZipFile.ExtractToDirectory(drive.TLetter.ToString() + ":\\contin\\DeployWindows.zip", drive.TLetter.ToString() + ":\\contin\\");
+            File.Delete(drive.TLetter.ToString() + ":\\contin\\DeployWindows.zip");
         }
         
         private void OSSelect_Load_1(object sender, EventArgs e)
@@ -100,6 +106,11 @@ namespace mainUI
             foreach (int item in versions)
             {
                 populateRelease(item);
+            }
+            if (sql.xmlStatus() && !String.IsNullOrEmpty(sql.CurrentRel) && !String.IsNullOrEmpty(sql.CurrentVer) && !String.IsNullOrEmpty(sql.CurrentLang))
+            {
+                auto = true;
+                button6_Click(sender, e);
             }
         }
 
@@ -139,7 +150,7 @@ namespace mainUI
             if (notAdded)
             {
                 notAdded = false;
-                string[] languageArray = { "Arabic", "Bulgarian", "Czech", "Danish", "German", "Greek", "English", "Spanish", "Estonian", "Finnish", "French", "Hebrew", "Croatian", "Hungarian", "Italian", "Japanese", "Korean", "Lithuanian", "Latvian", "Dutch", "Norwegian", "Polish", "Romanian", "Russian", "Slovak", "Slovenian", "Serbian", "Swedish", "Thai", "Turkish", "Ukrainian" };
+                string[] languageArray = { "Arabic", "Bulgarian", "Czech", "Danish", "German", "Greek", "English", "Spanish", "Estonian", "Finnish", "French", "Hebrew", "Croatian", "Hungarian", "Italian", "Japanese", "Korean", "Lithuanian", "Latvian", "Dutch", "Norwegian", "Polish", "Romanian", "Russian", "Slovak", "Slovenian", "Serbian", "Swedish", "Thai","Turkish", "Ukrainian" };
                 listBox2.Items.Clear();
                 listBox2.Items.AddRange(languageArray);
             }
@@ -238,13 +249,19 @@ namespace mainUI
 
         private void button6_Click(object sender, EventArgs e)
         {
-            Form2 sel = new Form2();
-
-            
+            Form2 sel = new Form2(sql,drive);
+            if (auto)
+            {
+                toPass = @"--ESDMode=True --Location=" + ISODown + " --WinVer=Windows_" + sql.CurrentVer + " --Release=" + argsFormat(sql.CurrentRel) + " --Language=" + sql.CurrentLang;
+                sel.language = sql.CurrentLang;
+            }
+            else
+            {
                 toPass = @"--ESDMode=True --Location=" + ISODown + " --WinVer=Windows_" + ver + " --Release=" + argsFormat(rel) + " --Language=" + listBox2.SelectedItem.ToString();
+                sel.language = listBox2.SelectedItem.ToString();
+            }
             timer2.Start();
             sel.topass = toPass;
-            sel.language = listBox2.SelectedItem.ToString();
             sel.ShowDialog();
         }
     }

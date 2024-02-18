@@ -1,4 +1,5 @@
-﻿using mainUI;
+﻿using CustomConfig;
+using mainUI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +17,9 @@ namespace contin
 {
     public partial class Username : Form
     {
+        SQLCheck sql;
+        DriveLetters drive;
+        bool auto;
         static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
 
         static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
@@ -43,8 +47,10 @@ namespace contin
         public bool hasChanged = false;
         private Size form;
         private Rectangle labl2, bttn1, txtb1, buttn6;
-        public Username()
+        public Username(SQLCheck sqls, DriveLetters drives)
         {
+            this.sql = sqls;
+            this.drive = drives;
             InitializeComponent();
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
@@ -65,6 +71,11 @@ namespace contin
         private void Username_Load(object sender, EventArgs e)
         {
             SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+            if (sql.xmlStatus() && !String.IsNullOrEmpty(sql.OSUsername))
+            {
+                auto = true;
+                button6_Click(sender, e);
+            }
         }
         
 
@@ -115,37 +126,49 @@ namespace contin
 
         private void button6_Click(object sender, EventArgs e)
         {
-
-            if (hasChanged == false)
+            if (auto)
             {
-                DialogResult iquit = MessageBox.Show("It looks like you have not changed the default username! Please click on \"Example: PortableISO\" and choose what you want. Otherwise, you will be stuck with \"PortableISO\"! You cannot change the username after clicking Yes. It is recommended you change it...", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if (iquit == DialogResult.Yes)
+                Password form = new Password(sql,drive);
+                form.username = sql.OSUsername;
+                form.language = language;
+                form.topass = topass;
+                timer2.Start();
+                form.ShowDialog();
+            }
+            else
+            {
+                if (hasChanged == false)
                 {
-                    Password form = new Password();
+                    DialogResult iquit = MessageBox.Show("It looks like you have not changed the default username! Please click on \"Example: PortableISO\" and choose what you want. Otherwise, you will be stuck with \"PortableISO\"! You cannot change the username after clicking Yes. It is recommended you change it...", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                    if (iquit == DialogResult.Yes)
+                    {
+                        Password form = new Password(sql, drive);
+                        form.username = username;
+                        form.language = language;
+                        form.topass = topass;
+                        timer2.Start();
+                        form.ShowDialog();
+                    }
+                    else
+                    {
+                    }
+                }
+                else if (username == null | username == "")
+                {
+                    MessageBox.Show("Username can't be empty");
+                }
+                else
+                {
+                    Password form = new Password(sql, drive);
                     form.username = username;
                     form.language = language;
                     form.topass = topass;
                     timer2.Start();
                     form.ShowDialog();
                 }
-                else
-                {
-                }
             }
-            else if (username == null | username == "")
-            {
-                MessageBox.Show("Username can't be empty");
-            }
-            else
-            {
-                Password form = new Password();
-                form.username = username;
-                form.language = language;
-                form.topass = topass;
-                timer2.Start();
-                form.ShowDialog();
-            }
+           
         }
 
         private void timer1_Tick(object sender, EventArgs e)

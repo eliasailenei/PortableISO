@@ -14,11 +14,14 @@ using mainUI;
 using System.Security.Policy;
 using System.Data.SqlTypes;
 using System.Runtime.InteropServices;
+using CustomConfig;
 
 namespace contin
 {
     public partial class Custome : Form
     {
+        SQLCheck sql;
+        DriveLetters drive;
         static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
 
         static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
@@ -49,9 +52,10 @@ namespace contin
         public string topass { get; set; }
         public string language { get; set; }
         public string langCode, langLocale;
-        public Custome()
+        public Custome(SQLCheck sqls, DriveLetters drives)
         {
-            // was about to rebuild everything lol, just forgot to assign the rectangles typical me
+            this.sql = sqls;
+            this.drive = drives;
             InitializeComponent();
             SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
             FormBorderStyle = FormBorderStyle.None;
@@ -106,6 +110,12 @@ namespace contin
             OOBE = new string[] { "HideEULAPage", "HideLocalAccountScreen", "HideOEMRegistrationScreen", "HideOnlineAccountScreens", "HideWirelessSetupInOOBE", "ProtectYourPC", "SkipUserOOBE" };
             config = new bool[] { true, true, true, true, true, true, true };
             listBox1.Items.AddRange(OOBE);
+            if (sql.xmlStatus())
+            {
+                MakeTXT();
+                this.Hide();
+                File.WriteAllText(Environment.SystemDirectory + "\\done.txt", "done");
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -187,7 +197,7 @@ namespace contin
                     @"del C:\Windows\Setup\Scripts\autorun.au3" + Environment.NewLine +
                     @"del C:\Windows\Setup\Scripts\Ninite.exe" + Environment.NewLine +
                     @"del %0";
-            File.WriteAllText("T:\\contin\\installer.bat", batchScript);
+            File.WriteAllText(drive.TLetter.ToString() + ":\\contin\\installer.bat", batchScript);
             string xmlContent = @"<?xml version=""1.0"" encoding=""utf-8""?>" + Environment.NewLine +
      @"<unattend xmlns=""urn:schemas-microsoft-com:unattend"">" + Environment.NewLine +
      @"    <settings pass=""oobeSystem"">" + Environment.NewLine +
@@ -239,7 +249,7 @@ namespace contin
      @"</unattend>";
 
 
-            string xmlLoc = "T:\\contin\\unattend.xml";
+            string xmlLoc = drive.TLetter.ToString() + ":\\contin\\unattend.xml";
            File.WriteAllText(xmlLoc, xmlContent);
         }
 

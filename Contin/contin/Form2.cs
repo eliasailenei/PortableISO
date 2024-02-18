@@ -11,11 +11,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
+using CustomConfig;
+
 
 namespace mainUI
 {
     public partial class Form2 : Form
     {
+        SQLCheck sql;
+        DriveLetters drive;
+        bool auto;
         private Rectangle lab1, lab2, lab3, lab4, lab5, but1, but2;
        public string topass { get; set; }
         public string language { get; set; }
@@ -53,7 +58,7 @@ namespace mainUI
                 }
             } catch
             {
-                // We ignore the error, it doesn't apply to us! Program is already on top and it shoudn't show setup!
+                
             }
             
         }
@@ -62,13 +67,19 @@ namespace mainUI
 
         private void Form2_Load(object sender, EventArgs e)
         {
-
+            if (sql.xmlStatus())
+            {
+                auto = true;
+                button2_Click(sender,e);
+            }
         }
 
         private Size form;
 
-        public Form2()
+        public Form2(SQLCheck sqls, DriveLetters drives)
         {
+            this.sql = sqls;
+            this.drive = drives;
             InitializeComponent();
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
@@ -113,11 +124,8 @@ namespace mainUI
 
             if (cleans == DialogResult.Yes)
             {
-                //Clean sel = new Clean();
-                //timer2.Start();
-                //sel.topass = topass;
-                //sel.ShowDialog();
-                Process.Start("T:\\contin\\DeployWindows.exe", "topass='" + topass + "' disks='" + disk[1] + "' isExpress='False'");
+                File.WriteAllText(Environment.SystemDirectory + "\\done.txt", "done");
+                Process.Start(drive.TLetter.ToString() + ":\\contin\\DeployWindows.exe",  "topass='" + topass + "' disks='" + disk[1] + "' isExpress='False'");
             }
             else
             {
@@ -127,28 +135,34 @@ namespace mainUI
         private void button2_Click(object sender, EventArgs e)
         {
 
-            DialogResult clean = MessageBox.Show("Are you sure you want to go express? Its a quick and easy way but you are not guaranteed to have similar results due to different Windows version. Use at risk!", "Option", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
+            DialogResult clean = DialogResult.No;
+            if (auto)
+            {
+                clean = DialogResult.Yes;
+            } else
+            {
+                clean = MessageBox.Show("Are you sure you want to go express? Its a quick and easy way but you are not guaranteed to have similar results due to different Windows version. Use at risk!", "Option", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            }
             if (clean == DialogResult.Yes)
             {
                 var process = new Process
                 {
                     StartInfo = new ProcessStartInfo
                     {
-                        FileName = "T:\\contin\\DeployWindows.exe",
-                        Arguments = "topass='" + topass + "' disks='" + disk[1] + "' isExpress='True'",
+                        FileName = drive.TLetter.ToString() + ":\\contin\\DeployWindows.exe",
+                        Arguments =  "topass='" + topass + "' disks='" + disk[1] + "' isExpress='True'",
                         UseShellExecute = true
                     }
                 };
                 process.Start();
                 Thread formThread = new Thread(() =>
                 {
-                    CustomDownload customDownload = new CustomDownload();
+                    CustomDownload customDownload = new CustomDownload(sql, drive);
                 timer2.Start();
                     customDownload.language = language;
                 customDownload.ShowDialog();
                 });
-                formThread.SetApartmentState(ApartmentState.STA); // Set the thread's apartment state to STA for Windows Forms
+                formThread.SetApartmentState(ApartmentState.STA); 
                 formThread.Start();
             }
             else
@@ -157,7 +171,3 @@ namespace mainUI
         }
     }
 }
-//Username user = new Username();
-//user.topass = topass;
-//timer2.Start();
-//user.ShowDialog();

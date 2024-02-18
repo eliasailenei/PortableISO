@@ -461,6 +461,10 @@ namespace CustomConfig
                     CLetter = letters[0][0]; 
                     TLetter = letters[1][0]; 
                 }
+            } else
+            {
+                CLetter = 'C';
+                TLetter = 'T';
             }
         }
         public async Task<char[]> GetLettersAsync()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomConfig;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -21,6 +22,9 @@ namespace contin
 {
     public partial class CustomDownload : Form
     {
+        SQLCheck sql;
+        DriveLetters drive;
+        bool auto;
         public DataTable dataBase;
         public string[] toInstall;
         public int toInstallPointer;
@@ -45,8 +49,10 @@ namespace contin
             }
             Opacity += .4;
         }
-        public CustomDownload()
+        public CustomDownload(SQLCheck sqls, DriveLetters drives)
         {
+            this.sql = sqls;
+            this.drive = drives;
             InitializeComponent();
             SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
             FormBorderStyle = FormBorderStyle.None;
@@ -96,24 +102,43 @@ namespace contin
             await pngDownload();
             await popList();
             label2.BeginInvoke(new Action(() => label2.Visible = false));
+            if (sql.xmlStatus() && !String.IsNullOrEmpty(sql.applicationLine))
+            {
+                auto = true;
+                doFinal();
+            }
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (toInstall != null && toInstall.Length > 0)
+            doFinal();
+        }
+        private void doFinal()
+        {
+            string finalResult = string.Empty;
+            if (auto)
             {
-                StringBuilder result = new StringBuilder();
-                foreach (string selectedText in toInstall)
+                linkLabel2.Enabled = false;
+                finalResult = sql.applicationLine;
+            } else
+            {
+                if (toInstall != null && toInstall.Length > 0)
                 {
-                    result.Append($"'{selectedText}' + ");
-                }
-                string finalResult = result.ToString();
+                    linkLabel2.Enabled = false;
+                    StringBuilder result = new StringBuilder();
+                    foreach (string selectedText in toInstall)
+                    {
+                        result.Append($"'{selectedText}' + ");
+                    }
+                    finalResult = result.ToString();
 
-                if (finalResult.EndsWith("+ "))
-                {
-                    finalResult = finalResult.Remove(finalResult.Length - 2);
+                    if (finalResult.EndsWith("+ "))
+                    {
+                        finalResult = finalResult.Remove(finalResult.Length - 2);
+                    }
                 }
-
+            }
+            if (!String.IsNullOrEmpty(finalResult)) {
                 Process process = new Process();
                 process.StartInfo = new ProcessStartInfo
                 {
@@ -124,27 +149,30 @@ namespace contin
                 };
                 process.Start();
                 process.WaitForExit();
-                if (Directory.Exists("T:\\contin\\Extras"))
+                if (Directory.Exists(drive.TLetter.ToString() + ":\\contin\\Extras"))
                 {
-                    Directory.Delete(("T:\\contin\\Extras"));
+                    Directory.Delete((drive.TLetter.ToString() + ":\\contin\\Extras"));
                 }
-                Directory.CreateDirectory("T:\\contin\\Extras");
-                File.Copy("T:\\contin\\setup.exe","T:\\contin\\Extras\\setup.exe");
-                Username user = new Username();
+                Directory.CreateDirectory(drive.TLetter.ToString() + ":\\contin\\Extras");
+                File.Copy(drive.TLetter.ToString() + ":\\contin\\setup.exe", drive.TLetter.ToString() + ":\\contin\\Extras\\setup.exe");
+                Username user = new Username(sql, drive);
                 timer2.Start();
                 user.language = language;
                 user.ShowDialog();
                 this.Close();
-            }
-            else
+            } else
             {
-                MessageBox.Show("You need to select at least one program", "DOWNLOAD ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                linkLabel2.Enabled = true;
+                MessageBox.Show("Please select some programs");
             }
-        }
 
+                
+            }
+            
+        
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Username user = new Username();
+            Username user = new Username(sql, drive);
             timer2.Start();
             user.ShowDialog();
             this.Close();
@@ -154,17 +182,17 @@ namespace contin
         {
             await Task.Run(() =>
             {
-                if (Directory.Exists("T:\\contin\\NiniteForCMD"))
+                if (Directory.Exists(drive.TLetter.ToString() + ":\\contin\\NiniteForCMD"))
                 {
-                    Directory.Delete("T:\\contin\\NiniteForCMD", true);
+                    Directory.Delete(drive.TLetter.ToString() + ":\\contin\\NiniteForCMD", true);
                 }
-                Directory.CreateDirectory("T:\\contin\\NiniteForCMD");
+                Directory.CreateDirectory(drive.TLetter.ToString() + ":\\contin\\NiniteForCMD");
                 //This would get the latest version of required tool.
                 try
                 {
                     using (var client = new WebClient())
                     {
-                        client.DownloadFile("https://github.com/eliasailenei/NiniteForCMD/releases/download/Release/Program.zip", "T:\\contin\\NiniteForCMD.zip");
+                        client.DownloadFile("https://github.com/eliasailenei/NiniteForCMD/releases/download/Release/Program.zip", drive.TLetter.ToString() + ":\\contin\\NiniteForCMD.zip");
                     }
                 }
                 catch (Exception e)
@@ -180,8 +208,8 @@ namespace contin
                 }
 
                 
-                ZipFile.ExtractToDirectory("T:\\contin\\NiniteForCMD.zip", "T:\\contin\\NiniteForCMD");
-                File.Delete("T:\\contin\\NiniteForCMD.zip");
+                ZipFile.ExtractToDirectory(drive.TLetter.ToString() + ":\\contin\\NiniteForCMD.zip", drive.TLetter.ToString() + ":\\contin\\NiniteForCMD");
+                File.Delete(drive.TLetter.ToString() + ":\\contin\\NiniteForCMD.zip");
             });
         }
         private async Task getSource()
@@ -205,7 +233,7 @@ namespace contin
                 dataBase.Columns.Add("Title");
                 dataBase.Columns.Add("Value");
                 dataBase.Columns.Add("SRC");
-                string[] source = File.ReadAllLines("T:\\contin\\EXPORT.txt");
+                string[] source = File.ReadAllLines(drive.TLetter.ToString() + ":\\contin\\EXPORT.txt");
                 foreach (string item in source)
                 {
                     DataRow newRow = dataBase.NewRow();

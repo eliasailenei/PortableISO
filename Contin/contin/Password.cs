@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomConfig;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,6 +15,9 @@ namespace contin
 {
     public partial class Password : Form
     {
+        SQLCheck sql;
+        DriveLetters drive;
+        bool auto;
         static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
 
         static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
@@ -42,8 +46,10 @@ namespace contin
         public string username { get; set; }
         public string topass { get; set; }
         public string language { get; set; }
-        public Password()
+        public Password(SQLCheck sqls, DriveLetters drives)
         {
+            this.sql = sqls;
+            this.drive = drives;
             InitializeComponent();
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
@@ -92,30 +98,43 @@ namespace contin
 
         private void button6_Click(object sender, EventArgs e)
         {
-            if (password == null || textBox1.Text == "")
+            if (auto)
             {
-
-                MessageBox.Show("Password cannot be empty!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else if (passwordagain == null || textBox2.Text == "")
-            {
-
-                MessageBox.Show("You forgot to enter the password again! Try again!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else if (!passwordagain.Equals(password))
-            {
-                MessageBox.Show("Passwords do not match!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else if (passwordagain.Equals(password))
-            {
-               Custome form = new Custome();
+                Custome form = new Custome(sql, drive);
                 form.user = username;
                 form.language = language;
                 form.password = password;
                 form.topass = topass;
                 timer2.Start();
                 form.ShowDialog();
+            } else
+            {
+                if (password == null || textBox1.Text == "")
+                {
+
+                    MessageBox.Show("Password cannot be empty!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                else if (passwordagain == null || textBox2.Text == "")
+                {
+
+                    MessageBox.Show("You forgot to enter the password again! Try again!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                else if (!passwordagain.Equals(password))
+                {
+                    MessageBox.Show("Passwords do not match!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                else if (passwordagain.Equals(password))
+                {
+                    Custome form = new Custome(sql, drive);
+                    form.user = username;
+                    form.language = language;
+                    form.password = password;
+                    form.topass = topass;
+                    timer2.Start();
+                    form.ShowDialog();
+                }
             }
+            
         }
 
         private void textBox1_Enter(object sender, EventArgs e)
@@ -144,6 +163,13 @@ namespace contin
         private void Password_Load(object sender, EventArgs e)
         {
             SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+            if (sql.xmlStatus() && !String.IsNullOrEmpty(sql.OSPassword))
+            {
+                auto = true;
+                Decryptors decryptors = new Decryptors();
+                password = decryptors.DESDecrypt(sql.OSPassword, username, 128);
+                button6_Click(sender,e);
+            }
         }
 
         private void textBox2_Enter(object sender, EventArgs e)

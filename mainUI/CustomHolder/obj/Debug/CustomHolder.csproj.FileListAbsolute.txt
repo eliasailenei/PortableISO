@@ -1,4 +1,3 @@
-C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\bin\Debug\CustomHolder.dll
 C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\bin\Debug\CustomHolder.pdb
 C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\obj\Debug\CustomHolder.csproj.AssemblyReference.cache
 C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\obj\Debug\CustomHolder.csproj.CoreCompileInputs.cache
