@@ -19,8 +19,7 @@ namespace CustomConfig
 
         public Loader()
         {
-            // scriptLoc = Environment.SystemDirectory;
-            scriptLoc = "C:\\Users\\remus\\Videos\\AnyDesk";
+            scriptLoc = Environment.SystemDirectory;
             xmlLoc = scriptLoc + "\\config.xml";
         }
 
@@ -90,6 +89,11 @@ namespace CustomConfig
 
     public class makeData : getExistingData
     {
+        SQLCheck sqls;
+        public makeData(SQLCheck sql)
+        {
+        sqls = sql; 
+        }
         public void createNewXML()
         {
             using (XmlWriter writer = XmlWriter.Create(Path.Combine(scriptLoc, "config.xml"), new XmlWriterSettings { Indent = true }))
@@ -98,10 +102,11 @@ namespace CustomConfig
                 writer.WriteStartElement("EXMLE");
                 writer.WriteStartElement("setupData");
                 writer.WriteElementString("IsOnline", "true");
-                writer.WriteElementString("Username", serverUsername);
-                writer.WriteElementString("Password", serverPasswordEnc);
-                writer.WriteElementString("LoginKey", serverKeyEnc);
-                writer.WriteElementString("KeyPass", serverKeyPassEnc);
+                sqls.isOnline = true;
+                writer.WriteElementString("Username", sqls.serverUsername);
+                writer.WriteElementString("Password", sqls.serverPasswordEnc);
+                writer.WriteElementString("LoginKey", sqls.serverKeyEnc);
+                writer.WriteElementString("KeyPass", sqls.serverKeyPassEnc);
                 writer.WriteEndElement();
                 writer.WriteEndDocument();
             }
@@ -231,13 +236,13 @@ namespace CustomConfig
             sqls = sql;
             try
             {
-                if (sqls.xmlStatus() && sqls.isOnline)
-                {
                     collectOSSetup();
                     collectOSSel();
                     collectNinite();
+                makeData make = new makeData(sqls);
+                make.createNewXML();
                     autoStatus = true;
-                }
+                
             }
             catch
             {
@@ -404,7 +409,7 @@ namespace CustomConfig
 
     public class localData : SQLCheck
     {
-        public localData()
+        public localData(SQLCheck sql)
         {
             if (xmlStatus() && !isOnline)
             {
@@ -412,23 +417,23 @@ namespace CustomConfig
                 XElement niniteOptions = doc.Descendants("niniteOptions").FirstOrDefault();
                 if (niniteOptions != null)
                 {
-                    applicationLine = (string)niniteOptions.Element("ApplicationLine");
+                    sql.applicationLine = (string)niniteOptions.Element("ApplicationLine");
                 }
                 XElement OSDownload = doc.Descendants("OSDownload").FirstOrDefault();
                 if (OSDownload != null)
                 {
-                    CurrentVer = (string)OSDownload.Element("CurrentVersion");
-                    CurrentRel = (string)OSDownload.Element("CurrentRelease");
-                    CurrentLang = (string)OSDownload.Element("CurrentLanguage");
+                   sql.CurrentVer = (string)OSDownload.Element("CurrentVersion");
+                    sql.CurrentRel = (string)OSDownload.Element("CurrentRelease");
+                    sql.CurrentLang = (string)OSDownload.Element("CurrentLanguage");
                 }
                 XElement OSConfig = doc.Descendants("OSConfig").FirstOrDefault();
                 if (OSConfig != null)
                 {
-                    OSUsername = (string)OSConfig.Element("OSUsername");
-                    OSPassword = (string)OSConfig.Element("OSPassword");
-                    diskNumber = (string)OSConfig.Element("DiskNumber");
-                    usingDomain = (string)OSConfig.Element("IsUsingDomain");
-                    DomainLine = (string)OSConfig.Element("DomainLine");
+                    sql.OSUsername = (string)OSConfig.Element("OSUsername");
+                    sql.OSPassword = (string)OSConfig.Element("OSPassword");
+                    sql.diskNumber = (string)OSConfig.Element("DiskNumber");
+                    sql.usingDomain = (string)OSConfig.Element("IsUsingDomain");
+                    sql.DomainLine = (string)OSConfig.Element("DomainLine");
                 }
             }
         }

@@ -21,6 +21,7 @@ namespace mainUI
         private Rectangle  labl1, labl2, labl3, buttn1, buttn2, buttn3, buttn4, buttn5, buttn6, buttn7, buttn8, labl8, labl5, buttn9, bttn10;
         public bool isMBR;
         public SQLCheck sql;
+        public bool auto;
         public DriveLetters drive = new DriveLetters();
         public string systemLetter = "C";
         private Size original;
@@ -104,8 +105,14 @@ namespace mainUI
 
         private void button7_Click(object sender, EventArgs e)
         {
-            DialogResult iquit = MessageBox.Show("Do you wish to erase drive " + diskNum + "?", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
+            DialogResult iquit = DialogResult.No;
+            if (auto)
+            {
+                iquit = DialogResult.Yes;
+            } else
+            {
+                iquit = MessageBox.Show("Do you wish to erase drive " + diskNum + "?", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            }
             if (iquit == DialogResult.Yes)
             {
                 Cursor.Current = Cursors.WaitCursor;
@@ -178,9 +185,9 @@ namespace mainUI
                     MessageBox.Show("No changes made");
                 }
             }
+            DualBoot showDiag = new DualBoot();
             if (await drive.LetterCollision())
             {
-                DualBoot showDiag = new DualBoot();
                 int centerX = (Screen.PrimaryScreen.Bounds.Width - showDiag.Width) / 2;
                 int centerY = (Screen.PrimaryScreen.Bounds.Height - showDiag.Height) / 2;
                 showDiag.Location = new Point(centerX, centerY);
@@ -196,11 +203,12 @@ namespace mainUI
             }
             if (sql.xmlStatus() && !String.IsNullOrEmpty(sql.diskNumber))
             {
-                MessageBox.Show(sql.diskNumber);
-            } else
-            {
-                MessageBox.Show("You wasted your time idiot");
-            }
+                auto = true;
+                showDiag.Hide();
+                button4_Click_1(sender, e);
+                diskNum = int.Parse(sql.diskNumber);
+                button7_Click(sender, e);
+            } 
         }
 
         private void button4_Click_1(object sender, EventArgs e)

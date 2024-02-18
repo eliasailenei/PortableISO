@@ -85,6 +85,20 @@ namespace mainUI
                 showDiag.InteractionComplete += (s, args) =>
                 {
                     showDiag.Hide();
+                    if (sql.xmlStatus())
+                    {
+                        if (sql.isOnline)
+                        {
+                            Cursor = Cursors.WaitCursor;
+                            remoteData remote = new remoteData(sql);
+                            remote.getAutoStatus();
+                            Cursor = Cursors.Arrow;
+                        }
+                        else
+                        {
+                            localData local = new localData(sql);
+                        }
+                    }
                     DiskSelect sel = new DiskSelect(sql);
                     timer2.Start();
                     sel.ShowDialog();
@@ -226,7 +240,8 @@ namespace mainUI
                 peDriver.Start();
                 peDriver.WaitForExit();
             }
-            catch { 
+            catch
+            {
                 if (sql.getScriptExistance())
                 {
                     if (sql.xmlStatus() == false)
@@ -247,13 +262,25 @@ namespace mainUI
                             sel.ShowDialog();
                         };
                     }
+                    else
+                    {
+                        if (sql.isOnline)
+                        {
+                            Cursor = Cursors.WaitCursor;
+                            remoteData remote = new remoteData(sql);
+                            remote.getAutoStatus();
+                            Cursor = Cursors.Arrow;
+                        }
+                        else
+                        {
+                            localData local = new localData(sql);
+                        }
+                        DiskSelect sel = new DiskSelect(sql);
+                        timer2.Start();
+                        sel.ShowDialog();
+                    }
                 }
-                
-                
-
-
             }
-           
             isAble(true);
             net();
             if (isFailedSetup())
