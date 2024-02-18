@@ -239,9 +239,6 @@ namespace mainUI
                 peDriver.StartInfo.CreateNoWindow = false;
                 peDriver.Start();
                 peDriver.WaitForExit();
-            }
-            catch
-            {
                 if (sql.getScriptExistance())
                 {
                     if (sql.xmlStatus() == false)
@@ -280,6 +277,10 @@ namespace mainUI
                         sel.ShowDialog();
                     }
                 }
+            }
+            catch
+            {
+                MessageBox.Show("Current version is corrupt, please try again later");
             }
             isAble(true);
             net();
