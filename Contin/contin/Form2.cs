@@ -125,6 +125,7 @@ namespace mainUI
             if (cleans == DialogResult.Yes)
             {
                 File.WriteAllText(Environment.SystemDirectory + "\\done.txt", "done");
+                MessageBox.Show("Thank you for using PortableISO");
                 Process.Start(drive.TLetter.ToString() + ":\\contin\\DeployWindows.exe",  "topass='" + topass + "' disks='" + disk[1] + "' isExpress='False'");
             }
             else

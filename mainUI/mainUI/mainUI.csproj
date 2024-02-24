@@ -131,6 +131,12 @@
     <Compile Include="Confirm.Designer.cs">
       <DependentUpon>Confirm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CustomLocation.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomLocation.Designer.cs">
+      <DependentUpon>CustomLocation.cs</DependentUpon>
+    </Compile>
     <Compile Include="DiskSelect.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -165,6 +171,9 @@
     </Compile>
     <EmbeddedResource Include="Confirm.resx">
       <DependentUpon>Confirm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomLocation.resx">
+      <DependentUpon>CustomLocation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DiskSelect.resx">
       <DependentUpon>DiskSelect.cs</DependentUpon>

@@ -143,6 +143,18 @@ namespace mainUI
             };
         }
 
+        private void button6_Click(object sender, EventArgs e)
+        {
+           CustomLocation showDiag = new CustomLocation();
+            int centerX = (Screen.PrimaryScreen.Bounds.Width - showDiag.Width) / 2;
+            int centerY = (Screen.PrimaryScreen.Bounds.Height - showDiag.Height) / 2;
+            showDiag.Location = new Point(centerX, centerY);
+            this.Controls.Add(showDiag);
+            showDiag.sql = sql;
+            showDiag.BringToFront();
+            showDiag.Show();
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             Process.Start(@"X:\Windows\System32\WinXShell\WinXShell.exe", "-ui -jcfg wxsUI\\UI_Resolution.zip");

@@ -307,7 +307,7 @@ namespace CustomConfig
 
                     if (!string.IsNullOrEmpty(inputsss))
                     {
-                        sqls.OSPassword = inputsss;
+                        sqls.OSUsername = inputsss;
                     }
                 }
             }
@@ -369,7 +369,7 @@ namespace CustomConfig
 
                     if (!string.IsNullOrEmpty(inputs))
                     {
-                        sqls.CurrentLang = inputs;
+                        sqls.CurrentRel = inputs;
                     }
                 }
             }

@@ -14,6 +14,7 @@ namespace mainUI
     public partial class XML : UserControl
     {
         public event EventHandler InteractionComplete;
+        public string pass;
         public SQLCheck sql { get; set; }
         public XML()
         {
@@ -33,12 +34,12 @@ namespace mainUI
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (sql.serverUsername == null || sql.serverPasswordEnc == null || sql.serverKeyEnc == null || sql.serverKeyPassEnc == null)
+            if (sql.serverUsername == null || pass == null || sql.serverKeyEnc == null || sql.serverKeyPassEnc == null)
             {
                 MessageBox.Show("You have left critical information blank, please fill in the correct details.");
             } else
             {
-                if (sql.userLogin(textBox2.Text) == false)
+                if (sql.userLogin(pass) == false)
                 {
                     MessageBox.Show("Please check the login, it looks like you typed them wrong.");
                 } else
@@ -80,7 +81,9 @@ namespace mainUI
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
-            
+            Decryptors dec = new Decryptors();
+            pass = textBox2.Text;
+            sql.serverPasswordEnc = dec.Encrypt(pass, "unlock", 128);
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)

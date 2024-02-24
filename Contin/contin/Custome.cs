@@ -112,9 +112,7 @@ namespace contin
             listBox1.Items.AddRange(OOBE);
             if (sql.xmlStatus())
             {
-                MakeTXT();
-                this.Hide();
-                File.WriteAllText(Environment.SystemDirectory + "\\done.txt", "done");
+                button6_Click(sender,e);
             }
         }
 
@@ -132,16 +130,11 @@ namespace contin
 
         private void button6_Click(object sender, EventArgs e)
         {
-            DialogResult iquit = MessageBox.Show("Do you want to continue? You won't be able to change after setup is complete!", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (iquit == DialogResult.Yes)
-            {
                 MakeTXT();
-                this.Hide();
-            }
-            else
-            {
-            }
+                File.WriteAllText(Environment.SystemDirectory + "\\done.txt", "done");
+                this.Close();
+            
+            
         }
         private void setKeyboard(string langToSeach)
         {
@@ -192,24 +185,13 @@ namespace contin
                 protect = 3;
             }
             string batchScript = @"@echo off" + Environment.NewLine +
-                    @"start /wait C:\Windows\Setup\Scripts\autorun.exe C:\Windows\Setup\Scripts\autorun.au3" + Environment.NewLine +
-                    @"del C:\Windows\Setup\Scripts\autorun.exe" + Environment.NewLine +
-                    @"del C:\Windows\Setup\Scripts\autorun.au3" + Environment.NewLine +
-                    @"del C:\Windows\Setup\Scripts\Ninite.exe" + Environment.NewLine +
+                    @"start /wait C:\Windows\Setup\Scripts\MoveInstalled.exe" + Environment.NewLine +
                     @"del %0";
             File.WriteAllText(drive.TLetter.ToString() + ":\\contin\\installer.bat", batchScript);
             string xmlContent = @"<?xml version=""1.0"" encoding=""utf-8""?>" + Environment.NewLine +
      @"<unattend xmlns=""urn:schemas-microsoft-com:unattend"">" + Environment.NewLine +
      @"    <settings pass=""oobeSystem"">" + Environment.NewLine +
      @"        <component name=""Microsoft-Windows-Shell-Setup"" processorArchitecture=""amd64"" publicKeyToken=""31bf3856ad364e35"" language=""neutral"" versionScope=""nonSxS"" xmlns:wcm=""http://schemas.microsoft.com/WMIConfig/2002/State"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">" + Environment.NewLine +
-     @"            <FirstLogonCommands>" + Environment.NewLine +
-     @"                <SynchronousCommand wcm:action=""add"">" + Environment.NewLine +
-     @"                    <CommandLine>C:\tempdelete.bat</CommandLine>" + Environment.NewLine +
-     @"                    <Description>Deletes the T: or D: drive</Description>" + Environment.NewLine +
-     @"                    <Order>1</Order>" + Environment.NewLine +
-     @"                    <RequiresUserInput>true</RequiresUserInput>" + Environment.NewLine +
-     @"                </SynchronousCommand>" + Environment.NewLine +
-     @"            </FirstLogonCommands>" + Environment.NewLine +
      @"            <OOBE>" + Environment.NewLine +
      @"                <HideEULAPage>" + config[0] + "</HideEULAPage>" + Environment.NewLine +
      @"                <HideLocalAccountScreen>" + config[1] + "</HideLocalAccountScreen>" + Environment.NewLine +

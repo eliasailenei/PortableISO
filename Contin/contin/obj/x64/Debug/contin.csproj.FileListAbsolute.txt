@@ -46,7 +46,6 @@ C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\mainU
 C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\mainUI.OSSelect.resources
 C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\contin.Password.resources
 C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\contin.Properties.Resources.resources
-C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\contin.UserControl1.resources
 C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\contin.Username.resources
 C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\contin.csproj.GenerateResource.cache
 C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\contin.csproj.CoreCompileInputs.cache
@@ -92,3 +91,4 @@ C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\bin\System.Text.Enc
 C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\contin.csproj.SuggestedBindingRedirects.cache
 C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\contin.exe.config
 C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\contin.csproj.CopyComplete
+C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\contin.Driver.resources

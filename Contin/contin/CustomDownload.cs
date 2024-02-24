@@ -143,7 +143,7 @@ namespace contin
                 process.StartInfo = new ProcessStartInfo
                 {
                     FileName = @"NiniteForCMD\\NiniteForCMD.exe",
-                    Arguments = "SELECT " + finalResult + ",LOCATION T:\\contin\\,DOWNLOAD",
+                    Arguments = "SELECT " + finalResult + ",LOCATION " + drive.TLetter.ToString() + ":\\contin\\,DOWNLOAD",
                     UseShellExecute = false,
                     CreateNoWindow = true
                 };
@@ -155,10 +155,31 @@ namespace contin
                 }
                 Directory.CreateDirectory(drive.TLetter.ToString() + ":\\contin\\Extras");
                 File.Copy(drive.TLetter.ToString() + ":\\contin\\setup.exe", drive.TLetter.ToString() + ":\\contin\\Extras\\setup.exe");
-                Username user = new Username(sql, drive);
-                timer2.Start();
-                user.language = language;
-                user.ShowDialog();
+                if (auto)
+                {
+                    Username user = new Username(sql, drive);
+                    timer2.Start();
+                    user.language = language;
+                    user.Show();
+                }
+                else
+                {
+                    Driver showDiag = new Driver(drive);
+                    int centerX = (Screen.PrimaryScreen.Bounds.Width - showDiag.Width) / 2;
+                    int centerY = (Screen.PrimaryScreen.Bounds.Height - showDiag.Height) / 2;
+                    showDiag.Location = new Point(centerX, centerY);
+                    this.Controls.Add(showDiag);
+                    showDiag.BringToFront();
+                    showDiag.Show();
+                    showDiag.InteractionComplete += (s, args) =>
+                    {
+                        Username user = new Username(sql, drive);
+                        timer2.Start();
+                        user.language = language;
+                        user.ShowDialog();
+                    };
+                    
+                }
                 this.Close();
             } else
             {
@@ -218,7 +239,7 @@ namespace contin
             {
                 Process process = new Process();
                 process.StartInfo.FileName = "NiniteForCMD\\NiniteForCMD.exe";
-                process.StartInfo.Arguments = "LOCATION T:\\contin\\,EXPORT ALL";
+                process.StartInfo.Arguments = "LOCATION " + drive.TLetter.ToString() + ":\\contin\\,EXPORT ALL";
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.CreateNoWindow = true;
                 process.Start();

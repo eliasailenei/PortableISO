@@ -105,8 +105,8 @@ namespace contin
                 form.language = language;
                 form.password = password;
                 form.topass = topass;
-                timer2.Start();
-                form.ShowDialog();
+                form.Show();
+                this.Close();
             } else
             {
                 if (password == null || textBox1.Text == "")
@@ -130,8 +130,8 @@ namespace contin
                     form.language = language;
                     form.password = password;
                     form.topass = topass;
-                    timer2.Start();
                     form.ShowDialog();
+                    this.Close();
                 }
             }
             

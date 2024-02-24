@@ -117,7 +117,7 @@ namespace mainUI
         public void populateRelease(int ver)
         {
             Process infoGain = new Process();
-            infoGain.StartInfo.FileName = "MSWISO\\MSWISO.exe";
+            infoGain.StartInfo.FileName = drive.TLetter.ToString() + ":\\contin\\MSWISO\\MSWISO.exe";
             infoGain.StartInfo.Arguments = "--ESDMode=True --WinVer=Windows_" + ver + " --Release=";
             infoGain.StartInfo.UseShellExecute = false;
             infoGain.StartInfo.CreateNoWindow = true;

@@ -132,8 +132,8 @@ namespace contin
                 form.username = sql.OSUsername;
                 form.language = language;
                 form.topass = topass;
-                timer2.Start();
-                form.ShowDialog();
+                form.Show();
+                this.Close();
             }
             else
             {
@@ -147,8 +147,8 @@ namespace contin
                         form.username = username;
                         form.language = language;
                         form.topass = topass;
-                        timer2.Start();
                         form.ShowDialog();
+                        this.Close();
                     }
                     else
                     {
@@ -164,8 +164,8 @@ namespace contin
                     form.username = username;
                     form.language = language;
                     form.topass = topass;
-                    timer2.Start();
                     form.ShowDialog();
+                    this.Close();
                 }
             }
            

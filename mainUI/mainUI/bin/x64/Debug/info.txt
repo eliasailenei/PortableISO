@@ -1,2 +1,0 @@
-1      NVMe CT200... 2316E6CADA55        _00000001.   Healthy              Online                    1.82 TB GPT       
-0      NVMe INTEL... 0000_0000_0100_0000_E4D2_5CBF... Healthy              Online                  476.94 GB GPT       

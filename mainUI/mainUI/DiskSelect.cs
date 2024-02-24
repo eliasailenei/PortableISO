@@ -113,23 +113,24 @@ namespace mainUI
             {
                 iquit = MessageBox.Show("Do you wish to erase drive " + diskNum + "?", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             }
+            File.WriteAllText(Environment.SystemDirectory + "\\driveLetters.txt", drive.CLetter.ToString() + "\n" + drive.TLetter.ToString());
             if (iquit == DialogResult.Yes)
             {
                 Cursor.Current = Cursors.WaitCursor;
                 DriveMake();
                 timer2.Start();
-                if (Directory.Exists(drive.TLetter.ToString() + "contin"))
+                if (Directory.Exists(drive.TLetter.ToString() + ":\\contin"))
                 {
-                    Directory.Delete(drive.TLetter.ToString() + "contin", true);
+                    Directory.Delete(drive.TLetter.ToString() + ":\\contin", true);
                 }
-                Directory.CreateDirectory(drive.TLetter.ToString() + "contin");
+                Directory.CreateDirectory(drive.TLetter.ToString() + ":\\contin");
                 using (var client = new WebClient())
                 {
-                    client.DownloadFile("https://github.com/eliasailenei/PortableISO/releases/download/Contin/Release.zip", drive.TLetter.ToString() + "contin\\contin.zip");
+                    client.DownloadFile("https://github.com/eliasailenei/PortableISO/releases/download/Contin/Release.zip", drive.TLetter.ToString() + ":\\contin\\contin.zip");
                 }
-                ZipFile.ExtractToDirectory(drive.TLetter.ToString() + "contin\\contin.zip", drive.TLetter.ToString() + "contin");
-                File.Delete(drive.TLetter.ToString() + "contin\\contin.zip");
-                Process.Start(drive.TLetter.ToString() + "contin\\contin.exe", diskNum.ToString());
+                ZipFile.ExtractToDirectory(drive.TLetter.ToString() + ":\\contin\\contin.zip", drive.TLetter.ToString() + ":\\contin");
+                File.Delete(drive.TLetter.ToString() + ":\\contin\\contin.zip");
+                Process.Start(drive.TLetter.ToString() + ":\\contin\\contin.exe", diskNum.ToString());
                 this.Hide();
             }
             else
@@ -164,27 +165,6 @@ namespace mainUI
             catch (Exception ex)
             {
             }
-            if (isFailedSetup())
-            {
-                var errorBox = MessageBox.Show("It looks like the attempt to boot to Windows has failed. This is mainly due to your computer having a BIOS and not a UEFI system which mainly occurs on old PC's\\VM's. If you have the option to change to a EFI/UEFI system in the BIOS or just want to close your computer click Abort and be shut down. If you want to try to use MBR which might the fix the problem click Retry (only limited to 4TB per drive). To continue using a GPT drive, click Ignore.", "CRITICAL ERROR", MessageBoxButtons.AbortRetryIgnore,MessageBoxIcon.Error);
-                if (errorBox == DialogResult.Abort)
-                {
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = @"wpeutil.exe",
-                        Arguments = $"shutdown",
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    });
-                } else if (errorBox == DialogResult.Retry)
-                {
-                    isMBR = true;
-                    button9.Text = "Switch to GPT";
-                } else
-                {
-                    MessageBox.Show("No changes made");
-                }
-            }
             DualBoot showDiag = new DualBoot();
             if (await drive.LetterCollision())
             {
@@ -208,7 +188,30 @@ namespace mainUI
                 button4_Click_1(sender, e);
                 diskNum = int.Parse(sql.diskNumber);
                 button7_Click(sender, e);
-            } 
+            }
+            if (isFailedSetup() && auto == false)
+            {
+                var errorBox = MessageBox.Show("It looks like the attempt to boot to Windows has failed. This is mainly due to your computer having a BIOS and not a UEFI system which mainly occurs on old PC's\\VM's. If you have the option to change to a EFI/UEFI system in the BIOS or just want to close your computer click Abort and be shut down. If you want to try to use MBR which might the fix the problem click Retry (only limited to 4TB per drive). To continue using a GPT drive, click Ignore.", "CRITICAL ERROR", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
+                if (errorBox == DialogResult.Abort)
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = @"wpeutil.exe",
+                        Arguments = $"shutdown",
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    });
+                }
+                else if (errorBox == DialogResult.Retry)
+                {
+                    isMBR = true;
+                    button9.Text = "Switch to GPT";
+                }
+                else
+                {
+                    MessageBox.Show("No changes made");
+                }
+            }
         }
 
         private void button4_Click_1(object sender, EventArgs e)

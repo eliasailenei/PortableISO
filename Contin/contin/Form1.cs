@@ -21,6 +21,7 @@ namespace contin
         {
             DriveLetters drives = new DriveLetters(Environment.SystemDirectory + "\\driveLetters.txt");
             SQLCheck sql = new SQLCheck();
+            
             if (sql.xmlStatus())
             {
                 if (sql.isOnline)

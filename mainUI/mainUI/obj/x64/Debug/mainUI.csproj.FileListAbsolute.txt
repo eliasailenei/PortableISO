@@ -75,3 +75,4 @@ C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\obj\x64\Debug\mainU
 C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\bin\x64\Debug\BCrypt.Net-Next.dll
 C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\bin\x64\Debug\BCrypt.Net-Next.xml
 C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\obj\x64\Debug\mainUI.DualBoot.resources
+C:\Users\remus\source\repos\Clones\PortableISO\mainUI\mainUI\obj\x64\Debug\mainUI.CustomLocation.resources
