@@ -161,6 +161,7 @@ namespace contin
                     timer2.Start();
                     user.language = language;
                     user.Show();
+                    this.Close();
                 }
                 else
                 {
@@ -177,10 +178,11 @@ namespace contin
                         timer2.Start();
                         user.language = language;
                         user.ShowDialog();
+                        this.Close();
                     };
                     
                 }
-                this.Close();
+                
             } else
             {
                 linkLabel2.Enabled = true;

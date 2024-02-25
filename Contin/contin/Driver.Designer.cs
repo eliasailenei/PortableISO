@@ -48,6 +48,7 @@
             this.button1.Size = new System.Drawing.Size(511, 314);
             this.button1.TabIndex = 1;
             this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label1
             // 
@@ -93,7 +94,7 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // UserControl1
+            // Driver
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -103,7 +104,7 @@
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
-            this.Name = "UserControl1";
+            this.Name = "Driver";
             this.Size = new System.Drawing.Size(508, 311);
             this.Load += new System.EventHandler(this.UserControl1_Load);
             this.ResumeLayout(false);
