@@ -7,3 +7,4 @@
 ### You have two options:
 #### You can use the setup made by me [here][setup] (NOTE: even though I have added a certificate it might trip your antivirus. It is 100% a false positive, you can see the source code!). From here, you can also make your own WinPE image or get access to EXMLE to automate your install.
 #### You can also get the [ISO image][iso] if you prefer to use this with Rufus or a virtual machine (more on this later).
+### Once you have got image mounted, you can restart into PortableISO and begin setup! Note that this program heavily relies on the internet.
