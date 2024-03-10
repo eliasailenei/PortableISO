@@ -462,6 +462,11 @@ namespace SetupGUI
             System.Diagnostics.Process.Start("https://github.com/eliasailenei/PortableISO/releases/download/Drivers/winpe.wim");
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

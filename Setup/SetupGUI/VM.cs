@@ -16,5 +16,10 @@ namespace SetupGUI
         {
             InitializeComponent();
         }
+
+        private void VM_Load(object sender, EventArgs e)
+        {
+            axWindowsMediaPlayer1.URL = "https://www.youtube.com/watch?v=soFluDJSoFc";
+        }
     }
 }

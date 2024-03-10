@@ -125,6 +125,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivationKey.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ActivationKey.Designer.cs">
+      <DependentUpon>ActivationKey.cs</DependentUpon>
+    </Compile>
     <Compile Include="Confirm.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -169,6 +175,9 @@
     <Compile Include="XML.Designer.cs">
       <DependentUpon>XML.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ActivationKey.resx">
+      <DependentUpon>ActivationKey.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Confirm.resx">
       <DependentUpon>Confirm.cs</DependentUpon>
     </EmbeddedResource>
@@ -220,6 +229,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\auto.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pass.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -28,3 +28,8 @@ C:\Users\remus\source\repos\Clones\PortableISO\Setup\SetupGUI\obj\Debug\SetupGUI
 C:\Users\remus\source\repos\Clones\PortableISO\Setup\SetupGUI\obj\Debug\SetupGUI.csproj.CoreCompileInputs.cache
 C:\Users\remus\source\repos\Clones\PortableISO\Setup\SetupGUI\obj\Debug\SetupGUI.exe
 C:\Users\remus\source\repos\Clones\PortableISO\Setup\SetupGUI\obj\Debug\SetupGUI.pdb
+C:\Users\remus\source\repos\Clones\PortableISO\Setup\SetupGUI\bin\Debug\Interop.WMPLib.dll
+C:\Users\remus\source\repos\Clones\PortableISO\Setup\SetupGUI\bin\Debug\AxInterop.WMPLib.dll
+C:\Users\remus\source\repos\Clones\PortableISO\Setup\SetupGUI\obj\Debug\Interop.WMPLib.dll
+C:\Users\remus\source\repos\Clones\PortableISO\Setup\SetupGUI\obj\Debug\AxInterop.WMPLib.dll
+C:\Users\remus\source\repos\Clones\PortableISO\Setup\SetupGUI\obj\Debug\SetupGUI.csproj.ResolveComReference.cache
