@@ -52,7 +52,8 @@ namespace SetupGUI
         {
             ModeOfInstall mode = new ModeOfInstall();
             this.Hide();
-            mode.Show();
+           mode.Show();
+          
         }
 
         private void button2_Click(object sender, EventArgs e)

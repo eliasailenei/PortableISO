@@ -33,3 +33,4 @@ C:\Users\remus\source\repos\Clones\PortableISO\Setup\SetupGUI\bin\Debug\AxIntero
 C:\Users\remus\source\repos\Clones\PortableISO\Setup\SetupGUI\obj\Debug\Interop.WMPLib.dll
 C:\Users\remus\source\repos\Clones\PortableISO\Setup\SetupGUI\obj\Debug\AxInterop.WMPLib.dll
 C:\Users\remus\source\repos\Clones\PortableISO\Setup\SetupGUI\obj\Debug\SetupGUI.csproj.ResolveComReference.cache
+C:\Users\remus\source\repos\Clones\PortableISO\Setup\SetupGUI\obj\Debug\SetupGUI.Activation.resources

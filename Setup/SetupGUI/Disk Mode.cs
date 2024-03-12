@@ -257,6 +257,7 @@ namespace SetupGUI
                                 Process.Start(ISOBurner, "/q " + isoPlace);
                         }
                         label9.Text = "Done";
+                        progressBar1.Value = 100;
                         MessageBox.Show("All Done!");
                     }
                     else

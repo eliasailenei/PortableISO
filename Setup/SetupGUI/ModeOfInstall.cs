@@ -20,7 +20,7 @@ namespace SetupGUI
 
         private async void ModeOfInstall_Load(object sender, EventArgs e)
         {
-            string content = "You have 4 options; it is recommended you choose USB if you have a USB drive.\n\nRemember that the image is not always 700MB and can be more than a 1GB depending on drivers and if its WinRE or WinPE.\n\nAllow at least 30 seconds for the drives to scan.";
+            string content = "You have 4 options; it is recommended you choose USB if you have a USB drive.\n\nRemember that the image is not always 700MB and can be more than a 1GB depending on drivers and if its WinRE or WinPE.\n\nAllow at least 30 seconds for the drives to scan.\nEXAMINERS USE VM!";
             richTextBox1.AppendText(content);
             try
             {

@@ -33,8 +33,9 @@ namespace SetupGUI
 
         private async void button2_Click(object sender, EventArgs e)
         {
+            showDiagofLicense();
             isoLocs(true);
-            if (isoLoc == null)
+            while (isoLoc == null)
             {
                 MessageBox.Show("Please select a folder.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 isoLocs(true);
@@ -47,6 +48,11 @@ namespace SetupGUI
             disk.isoFile = isoLoc;
             this.Close();
             disk.Show();
+        }
+        private void showDiagofLicense()
+        {
+            Activation active = new Activation();
+            active.ShowDialog();
         }
         private void isoLocs(bool isFolder)
         {
@@ -80,6 +86,7 @@ namespace SetupGUI
 
         private void button3_Click(object sender, EventArgs e)
         {
+            showDiagofLicense();
             isoLocs(false);
             while (isoLoc == null)
             {

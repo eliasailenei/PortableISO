@@ -55,7 +55,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft YaHei", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.label1.Location = new System.Drawing.Point(482, 21);
+            this.label1.Location = new System.Drawing.Point(482, 342);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(216, 42);
             this.label1.TabIndex = 4;
@@ -77,7 +77,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft YaHei", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.label3.Location = new System.Drawing.Point(482, 342);
+            this.label3.Location = new System.Drawing.Point(492, 21);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(275, 42);
             this.label3.TabIndex = 6;
@@ -100,7 +100,7 @@
             this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.label5.Font = new System.Drawing.Font("Microsoft YaHei Light", 15.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label5.Location = new System.Drawing.Point(479, 59);
+            this.label5.Location = new System.Drawing.Point(479, 380);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(359, 28);
             this.label5.TabIndex = 8;
@@ -122,7 +122,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft YaHei Light", 15.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label7.Location = new System.Drawing.Point(484, 384);
+            this.label7.Location = new System.Drawing.Point(494, 63);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(261, 28);
             this.label7.TabIndex = 10;
@@ -206,7 +206,7 @@
             this.button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button4.FlatAppearance.BorderSize = 0;
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.Location = new System.Drawing.Point(359, 342);
+            this.button4.Location = new System.Drawing.Point(369, 21);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(117, 110);
             this.button4.TabIndex = 2;
@@ -232,7 +232,7 @@
             this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button1.FlatAppearance.BorderSize = 2;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(359, 21);
+            this.button1.Location = new System.Drawing.Point(359, 342);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(117, 110);
             this.button1.TabIndex = 0;
