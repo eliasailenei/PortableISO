@@ -120,7 +120,7 @@ namespace mainUI
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(116, 58);
             this.button4.TabIndex = 15;
-            this.button4.Text = "Scan for Drives";
+            this.button4.Text = "Scan for Drives Again";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click_1);
             // 

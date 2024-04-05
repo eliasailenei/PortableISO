@@ -16,14 +16,15 @@ namespace mainUI
         public event EventHandler InteractionComplete;
         public DriveLetters drive { get; set; }
         public bool intent { get; set; }
-        public DualBoot()
+        public DualBoot(bool theIntent)
         {
+            intent = theIntent;
             InitializeComponent();
         }
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            if (await drive.LetterCollision())
+            if (intent)
             {
                 MessageBox.Show("Please resolve the drive letter problem then you can quit.");
             } else

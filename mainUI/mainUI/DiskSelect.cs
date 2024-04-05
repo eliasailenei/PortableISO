@@ -152,6 +152,7 @@ namespace mainUI
         }
         private async void DiskSelect_Load(object sender, EventArgs e)
         {
+            button4_Click_1(sender, e);
             button10.Text = "Dual Boot";
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
@@ -165,7 +166,7 @@ namespace mainUI
             catch (Exception ex)
             {
             }
-            DualBoot showDiag = new DualBoot();
+            DualBoot showDiag = new DualBoot(true);
             if (await drive.LetterCollision())
             {
                 int centerX = (Screen.PrimaryScreen.Bounds.Width - showDiag.Width) / 2;
@@ -173,13 +174,17 @@ namespace mainUI
                 showDiag.Location = new Point(centerX, centerY);
                 this.Controls.Add(showDiag);
                 showDiag.drive = drive;
-                showDiag.intent = true;
                 showDiag.BringToFront();
                 showDiag.Show();
                 showDiag.InteractionComplete += (s, args) =>
                 {
                     showDiag.Hide();
+                    showFailed();
                 };
+            }
+            else
+            {
+                showFailed();
             }
             if (sql.xmlStatus() && !String.IsNullOrEmpty(sql.diskNumber))
             {
@@ -189,6 +194,10 @@ namespace mainUI
                 diskNum = int.Parse(sql.diskNumber);
                 button7_Click(sender, e);
             }
+           
+        }
+        private void showFailed()
+        {
             if (isFailedSetup() && auto == false)
             {
                 var errorBox = MessageBox.Show("It looks like the attempt to boot to Windows has failed. This is mainly due to your computer having a BIOS and not a UEFI system which mainly occurs on old PC's\\VM's. If you have the option to change to a EFI/UEFI system in the BIOS or just want to close your computer click Abort and be shut down. If you want to try to use MBR which might the fix the problem click Retry (only limited to 4TB per drive). To continue using a GPT drive, click Ignore.", "CRITICAL ERROR", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
@@ -213,9 +222,9 @@ namespace mainUI
                 }
             }
         }
-
         private void button4_Click_1(object sender, EventArgs e)
         {
+            button4.Enabled = false;
             button1.Text = "Please wait...";
             button2.Text = "Please wait...";
             button3.Text = "Please wait...";
@@ -247,6 +256,7 @@ namespace mainUI
 
                 MessageBox.Show(errorMessage, "No drives!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            button4.Enabled = true;
         }
         private void GetDisk()
         {
@@ -312,7 +322,7 @@ namespace mainUI
 
         private void button10_Click(object sender, EventArgs e)
         {
-            DualBoot showDiag = new DualBoot();
+            DualBoot showDiag = new DualBoot(false);
             int centerX = (Screen.PrimaryScreen.Bounds.Width - showDiag.Width) / 2;
             int centerY = (Screen.PrimaryScreen.Bounds.Height - showDiag.Height) / 2;
             showDiag.Location = new Point(centerX, centerY);

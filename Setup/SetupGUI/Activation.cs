@@ -72,6 +72,9 @@ Complying with the criteria would lead to a smoother installation and makes all 
             if (_agreed)
             {
                 MessageBox.Show("Thank you for playing fair! Keep the key safe as you will need it at setup! ");
+                axWindowsMediaPlayer1.Dispose();
+                Backup backup = new Backup();
+                backup.ShowDialog();
                 this.Close();
             }
             else
@@ -79,6 +82,11 @@ Complying with the criteria would lead to a smoother installation and makes all 
                 MessageBox.Show("Program will not continue until you agree, you may close the setup by clicking the arrow pointing at the door.");
 
             }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

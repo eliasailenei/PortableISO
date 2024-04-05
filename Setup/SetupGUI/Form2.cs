@@ -16,7 +16,10 @@ namespace SetupGUI
     {
         public Form2()
         {
-            if (!Directory.Exists("7-Zip") || !Directory.Exists("oscdimg"))
+            // the reason why we delete everything is usually because the other files are corrupted as user cancels the extraction midway
+
+            // this is also the reason why this program is flagged as malware as it deletes and downloads new files as soon as its open
+            if (!Directory.Exists("7-Zip") || !Directory.Exists("oscdimg") || !File.Exists("AxInterop.WMPLib.dll") || !File.Exists("Interop.WMPLib.dll"))
             {
                 try
                 {
@@ -29,12 +32,19 @@ namespace SetupGUI
                     {
                         Directory.Delete("oscdimg", true);
                     }
+                    if (File.Exists("AxInterop.WMPLib.dll"))
+                    {
+                        File.Delete("AxInterop.WMPLib.dll");
+                    }
+                    if (File.Exists("Interop.WMPLib.dll"))
+                    {
+                        File.Delete("Interop.WMPLib.dll");
+                    }
 
                     using (var client = new WebClient())
                     {
                         client.DownloadFile("https://github.com/eliasailenei/PortableISO/releases/download/Portal/misc.zip", "misc.zip");
                     }
-
                     ZipFile.ExtractToDirectory("misc.zip", Directory.GetCurrentDirectory());
 
                     File.Delete("misc.zip");
@@ -45,11 +55,13 @@ namespace SetupGUI
                 }
             }
 
+
             InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // start install
             ModeOfInstall mode = new ModeOfInstall();
             this.Hide();
            mode.Show();
@@ -58,12 +70,14 @@ namespace SetupGUI
 
         private void button2_Click(object sender, EventArgs e)
         {
+            // legacy image creator
             CreateImagecs createImagecs = new CreateImagecs();
             createImagecs.Show();   
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
+            // close all windows algorithm
             List<Form> formsToClose = new List<Form>();
             foreach (Form form in Application.OpenForms)
             {

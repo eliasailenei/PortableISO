@@ -10,6 +10,8 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using Npgsql;
 using BCrypt;
+using System.Net;
+using System.Text.RegularExpressions;
 
 namespace CustomConfig
 {
@@ -498,6 +500,45 @@ namespace CustomConfig
             }
             return false;
         }
+    }
+    public class activationLib
+    {
+        public Dictionary<string,bool> getBlacklist()
+        {
+            Dictionary<string, bool> blacklist = new Dictionary<string, bool>();
+            try
+            {
+                using (var client = new WebClient())
+                {
+                    client.DownloadFile("https://raw.githubusercontent.com/Ja7ad/PIDChecker/master/blockedKey", "blacklist.txt");
+                }
+                string[] lines = File.ReadAllLines("blacklist.txt");
+                foreach (string line in lines)
+                {
+                    blacklist[line] = true;
+                }
+                return blacklist;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public bool fitPattern(string key)
+        {
+            Regex regex = new Regex(@"\b([a-zA-Z1-9]{5}-){4}[a-zA-Z1-9]{5}\b");
+            if (regex.IsMatch(key))
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+    }
+    public class globalStrings
+    {
+        public static string windowsKey { get; set; }
     }
 
 }

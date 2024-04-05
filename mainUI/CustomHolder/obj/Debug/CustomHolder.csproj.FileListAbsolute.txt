@@ -36,10 +36,10 @@ C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\bin\Debug\Sys
 C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\bin\Debug\System.Threading.Channels.xml
 C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\bin\Debug\System.Threading.Tasks.Extensions.xml
 C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\bin\Debug\System.ValueTuple.xml
-C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\obj\Debug\CustomHolder.csproj.CopyComplete
 C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\bin\Debug\BCrypt.Net-Next.dll
 C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\bin\Debug\PInvoke.Kernel32.dll
 C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\bin\Debug\PInvoke.Windows.Core.dll
 C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\bin\Debug\BCrypt.Net-Next.xml
 C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\bin\Debug\PInvoke.Kernel32.xml
 C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\bin\Debug\PInvoke.Windows.Core.xml
+C:\Users\remus\source\repos\Clones\PortableISO\mainUI\CustomHolder\obj\Debug\CustomHo.5952283A.Up2Date

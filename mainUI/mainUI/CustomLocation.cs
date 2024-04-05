@@ -27,18 +27,21 @@ namespace mainUI
             {
                 MessageBox.Show("Done");
                 this.Hide();
-            } else
-            {
-                MessageBox.Show("Not a valid path, shutting down!");
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = @"wpeutil.exe",
-                    Arguments = $"shutdown",
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                });
-
             }
+            else
+            {
+                MessageBox.Show("Incompatible XML! Please use one that was made by EXMLE!");
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.Hide();
         }
     }
 }

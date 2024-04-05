@@ -36,7 +36,7 @@ namespace SetupGUI
 
         private void CreateImagecs_Load(object sender, EventArgs e)
         {
-
+            // sets the defauts ready
             CheckADK();
             DeploymentTools = ADKLocation + "\\Deployment Tools";
             textBox1.Text = workingFolder;

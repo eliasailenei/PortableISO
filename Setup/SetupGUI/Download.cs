@@ -33,7 +33,6 @@ namespace SetupGUI
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            showDiagofLicense();
             isoLocs(true);
             while (isoLoc == null)
             {
@@ -43,16 +42,25 @@ namespace SetupGUI
             button2.Enabled = false;
             button3.Enabled = false;
             await downloadTask(ISOURL, isoLoc);
+            try
+            {
+                Activation active = new Activation();
+                active.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                var message = MessageBox.Show("It looks like Windows Media Player failed to launch. This is mainly caused by computers with the N or KN versions. Microsoft has already given a hotfix, would you like to apply? You will need to restart PC.", "WARNING", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                if (message == DialogResult.Yes)
+                {
+                    Process.Start("cmd.exe", "/c DISM /Online /Add-Capability /CapabilityName:Media.MediaFeaturePack~~~~0.0.1.0");
+                }
+                Environment.Exit(0);
+            }
             Disk_Mode disk = new Disk_Mode();
             disk.option = mode;
             disk.isoFile = isoLoc;
             this.Close();
             disk.Show();
-        }
-        private void showDiagofLicense()
-        {
-            Activation active = new Activation();
-            active.ShowDialog();
         }
         private void isoLocs(bool isFolder)
         {
@@ -86,7 +94,6 @@ namespace SetupGUI
 
         private void button3_Click(object sender, EventArgs e)
         {
-            showDiagofLicense();
             isoLocs(false);
             while (isoLoc == null)
             {
@@ -96,6 +103,20 @@ namespace SetupGUI
             Disk_Mode disk = new Disk_Mode();
             disk.option = mode;
             disk.isoFile = isoLoc;
+            try
+            {
+                Activation active = new Activation();
+                active.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                var message = MessageBox.Show("It looks like Windows Media Player failed to launch. This is mainly caused by computers with the N or KN versions. Microsoft has already given a hotfix, would you like to apply? You will need to restart PC.", "WARNING", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                if (message == DialogResult.Yes)
+                {
+                    Process.Start("cmd.exe", "/c DISM /Online /Add-Capability /CapabilityName:Media.MediaFeaturePack~~~~0.0.1.0");
+                }
+                Environment.Exit(0);
+            }
             this.Close();
             disk.Show();
         }

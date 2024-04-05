@@ -134,9 +134,20 @@ namespace SetupGUI
 
         private void button3_Click(object sender, EventArgs e)
         {
-            VM vM = new VM();
-            this.Close();
-            vM.Show();
+            try
+            {
+                VM vM = new VM();
+                this.Close();
+                vM.Show();
+            } catch (Exception ex)
+            {
+                var message = MessageBox.Show("It looks like Windows Media Player failed to launch. This is mainly caused by computers with the N or KN versions. Microsoft has already given a hotfix, would you like to apply? You will need to restart PC.", "WARNING", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                if (message == DialogResult.Yes)
+                {
+                    Process.Start("cmd.exe", "/c DISM /Online /Add-Capability /CapabilityName:Media.MediaFeaturePack~~~~0.0.1.0");
+                }
+            }
+            
         }
 
         private void button5_Click(object sender, EventArgs e)

@@ -19,7 +19,7 @@ namespace mainUI
     {
         private Size original;
         SQLCheck sql = new SQLCheck();
-        private Rectangle image1, maintext, subtext, credit, pleasewait, buttoncontinue, wifi, wifitext, dis, distext, shut, shuttext, autobttn, autotext;
+        private Rectangle image1, maintext, subtext, credit, pleasewait, buttoncontinue, wifi, wifitext, dis, distext, shut, shuttext, autobttn, autotext, xml;
         private string winxshell = @"X:\Windows\System32\WinXShell";
         public Form1()
         {
@@ -40,7 +40,7 @@ namespace mainUI
             shut = new Rectangle(button4.Location, button4.Size);
             autobttn = new Rectangle(button5.Location, button5.Size);   
             autotext = new Rectangle(label5.Location, label5.Size);
-
+            xml = new Rectangle(button6.Location, button6.Size);
         }
         private void resize_Control(Control c, Rectangle r)
         {
@@ -85,23 +85,33 @@ namespace mainUI
                 showDiag.InteractionComplete += (s, args) =>
                 {
                     showDiag.Hide();
-                    if (sql.xmlStatus())
+                    ActivationKey showDiags = new ActivationKey();
+                    int centerXs = (Screen.PrimaryScreen.Bounds.Width - showDiags.Width) / 2;
+                    int centerYs = (Screen.PrimaryScreen.Bounds.Height - showDiags.Height) / 2;
+                    showDiags.Location = new Point(centerXs, centerYs);
+                    this.Controls.Add(showDiags);
+                    showDiags.BringToFront();
+                    showDiags.Show();
+                    showDiags.InteractionComplete += (s1, args1) =>
                     {
-                        if (sql.isOnline)
+                        if (sql.xmlStatus())
                         {
-                            Cursor = Cursors.WaitCursor;
-                            remoteData remote = new remoteData(sql);
-                            remote.getAutoStatus();
-                            Cursor = Cursors.Arrow;
+                            if (sql.isOnline)
+                            {
+                                Cursor = Cursors.WaitCursor;
+                                remoteData remote = new remoteData(sql);
+                                remote.getAutoStatus();
+                                Cursor = Cursors.Arrow;
+                            }
+                            else
+                            {
+                                localData local = new localData(sql);
+                            }
                         }
-                        else
-                        {
-                            localData local = new localData(sql);
-                        }
-                    }
-                    DiskSelect sel = new DiskSelect(sql);
-                    timer2.Start();
-                    sel.ShowDialog();
+                        DiskSelect sel = new DiskSelect(sql);
+                        timer2.Start();
+                        sel.ShowDialog();
+                    };
                 };
             }
             else
@@ -218,6 +228,7 @@ namespace mainUI
             resize_Control(label8, shuttext);
             resize_Control(button5, autobttn);
             resize_Control(label5, autotext);
+            resize_Control(button6, xml);
         }
         bool ready;
         private void isAble(bool b)
@@ -293,6 +304,8 @@ namespace mainUI
             catch
             {
                 MessageBox.Show("Current version is corrupt, please try again later");
+                
+
             }
             isAble(true);
             net();
