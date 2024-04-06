@@ -1,7 +1,7 @@
 [paypal]: https://paypal.me/eliasppl
 [setup]: https://github.com/eliasailenei/PortableISO/releases/download/Portal/PortableISOSetup.exe
 [iso]: https://github.com/eliasailenei/PortableISO/releases/download/V2/release.iso
-# WARNING, SKIP FEATURE IN NINITE AND WHEN ASKED IF YOU WANT DRIVERS CURRENTLY NOT WORKING! HOTFIX COMMING SAT/SUN WITH HOTFIX FOR SETUP AFTER LOGON TOO.
+# CURRENT ISO OBSELETE, NEW WORK IS BEING DONE NOW WITH NEW FEATURES AND MAJOR BUG FIXES. NO MORE IMPROVEMENTS AFTERWARDS
 # PortableISO
 ![image](https://github.com/eliasailenei/PortableISO/assets/82527761/4f98a5b1-0e0c-4642-98ea-391d2cad437d)
 ## Get started
