@@ -142,7 +142,7 @@ namespace contin
                 Process process = new Process();
                 process.StartInfo = new ProcessStartInfo
                 {
-                    FileName = @"NiniteForCMD\\NiniteForCMD.exe",
+                    FileName = drive.TLetter.ToString() + ":\\contin\\NiniteForCMD\\NiniteForCMD.exe",
                     Arguments = "SELECT " + finalResult + ",LOCATION " + drive.TLetter.ToString() + ":\\contin\\,DOWNLOAD",
                     UseShellExecute = false,
                     CreateNoWindow = true
@@ -197,6 +197,7 @@ namespace contin
         {
             Username user = new Username(sql, drive);
             timer2.Start();
+            user.language = language;
             user.ShowDialog();
             this.Close();
         }
@@ -240,7 +241,7 @@ namespace contin
             await Task.Run(() =>
             {
                 Process process = new Process();
-                process.StartInfo.FileName = "NiniteForCMD\\NiniteForCMD.exe";
+                process.StartInfo.FileName = drive.TLetter.ToString() + ":\\contin\\NiniteForCMD\\NiniteForCMD.exe";
                 process.StartInfo.Arguments = "LOCATION " + drive.TLetter.ToString() + ":\\contin\\,EXPORT ALL";
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.CreateNoWindow = true;

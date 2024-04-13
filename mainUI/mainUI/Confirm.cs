@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Net;
 
 namespace mainUI
 {
@@ -46,27 +47,45 @@ namespace mainUI
         {
             DialogResult iquit = MessageBox.Show("Do you want to disagree with the terms and services of this program? This will shutdown your PC! If would like changes, say your opinion at github.com/eliasailenei.", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (iquit == DialogResult.Yes)
+            try
             {
-                Process.Start(new ProcessStartInfo
+                if (iquit == DialogResult.Yes)
                 {
-                    FileName = @"wpeutil.exe",
-                    Arguments = $"shutdown",
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                });
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = @"wpeutil.exe",
+                        Arguments = $"shutdown",
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    });
+                }
+                else
+                {
+                    this.Hide();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("You have accepted the terms. Click OK to continue.");
-                InteractionComplete.Invoke(this, EventArgs.Empty);
-                this.Hide();
+                MessageBox.Show($"Error: {ex.Message}");
             }
         }
 
         private void Confirm_Load(object sender, EventArgs e)
         {
+            if (File.Exists("Readme.txt"))
+            {
+                File.Delete("Readme.txt");
+            }
+            using (var client = new WebClient())
+            {
+                client.DownloadFile("https://raw.githubusercontent.com/eliasailenei/PortableISO/main/Readme.txt", "Readme.txt");
+            }
             richTextBox1.Text = File.ReadAllText("Readme.txt");
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

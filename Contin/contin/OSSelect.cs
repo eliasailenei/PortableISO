@@ -15,6 +15,7 @@ using System.Threading;
 using System.Net;
 using System.IO.Compression;
 using CustomConfig;
+using contin;
 namespace mainUI
 {
     public partial class OSSelect : Form
@@ -23,7 +24,7 @@ namespace mainUI
         DataTable Windows;
         SQLCheck sql;
         DriveLetters drive;
-        private Rectangle lab1, lab2, lab3, lab4, lab6, lab8, but3, but4,  but6, but7, list1, list2;
+        private Rectangle lab1, lab2, lab3, lab4,lab5, lab6,lab7, lab8,lab9, but3, but4,  but6, but7, list1, list2;
         private Size form;
         public bool auto;
         private bool notAdded = true;
@@ -46,8 +47,11 @@ namespace mainUI
             lab2 = new Rectangle(label2.Location, label2.Size);
             lab3 = new Rectangle(label3.Location, label3.Size);
             lab4 = new Rectangle(label4.Location, label4.Size);
+            lab5 = new Rectangle(label5.Location, label5.Size);
             lab6 = new Rectangle(label6.Location, label6.Size);
+            lab7 = new Rectangle(label7.Location, label7.Size);
             lab8 = new Rectangle(label8.Location, label8.Size);
+            lab9 = new Rectangle(label9.Location, label9.Size);
             but3 = new Rectangle(button3.Location, button3.Size);
             but4 = new Rectangle(button4.Location, button4.Size);
             but6 = new Rectangle(button6.Location, button6.Size);
@@ -72,25 +76,31 @@ namespace mainUI
 
         private void getLatest()
         {
-            //This would get the latest version of required tool.
-            if (Directory.Exists(drive.TLetter.ToString() + ":\\contin\\MSWISO"))
+            try
             {
-                Directory.Delete(drive.TLetter.ToString() + ":\\contin\\MSWISO", true);
+                //This would get the latest version of required tool.
+                if (Directory.Exists(drive.TLetter.ToString() + ":\\contin\\MSWISO"))
+                {
+                    Directory.Delete(drive.TLetter.ToString() + ":\\contin\\MSWISO", true);
+                }
+                Directory.CreateDirectory(drive.TLetter.ToString() + ":\\contin\\MSWISO");
+                using (var client = new WebClient())
+                {
+                    client.DownloadFile("https://github.com/eliasailenei/MSWISO/releases/download/Release/Stable.zip", drive.TLetter.ToString() + ":\\contin\\MSWISO.zip");
+                }
+                ZipFile.ExtractToDirectory(drive.TLetter.ToString() + ":\\contin\\MSWISO.zip", drive.TLetter.ToString() + ":\\contin\\MSWISO");
+                File.Delete(drive.TLetter.ToString() + ":\\contin\\MSWISO.zip");
+                // Gets DeployWindows at the same time as it both uses MSWISO
+                using (var client = new WebClient())
+                {
+                    client.DownloadFile("https://github.com/eliasailenei/DeployWindows/releases/download/Release/Program.zip", drive.TLetter.ToString() + ":\\contin\\DeployWindows.zip");
+                }
+                contin.ZipFileExtensions.ExtractToDirectoryWithOverwrite(drive.TLetter.ToString() + ":\\contin\\DeployWindows.zip", drive.TLetter.ToString() + ":\\contin\\");
+                File.Delete(drive.TLetter.ToString() + ":\\contin\\DeployWindows.zip");
+            } catch (Exception ex){
+                MessageBox.Show(ex.Message);
             }
-            Directory.CreateDirectory(drive.TLetter.ToString() + ":\\contin\\MSWISO");
-            using (var client = new WebClient())
-            {
-                client.DownloadFile("https://github.com/eliasailenei/MSWISO/releases/download/Release/Stable.zip", drive.TLetter.ToString() + ":\\contin\\MSWISO.zip");
-            }
-            ZipFile.ExtractToDirectory(drive.TLetter.ToString() + ":\\contin\\MSWISO.zip", drive.TLetter.ToString() + ":\\contin\\MSWISO");
-            File.Delete(drive.TLetter.ToString() + ":\\contin\\MSWISO.zip");
-            // Gets DeployWindows at the same time as it both uses MSWISO
-            using (var client = new WebClient())
-            {
-                client.DownloadFile("https://github.com/eliasailenei/DeployWindows/releases/download/Release/Program.zip", drive.TLetter.ToString() + ":\\contin\\DeployWindows.zip");
-            }
-            ZipFile.ExtractToDirectory(drive.TLetter.ToString() + ":\\contin\\DeployWindows.zip", drive.TLetter.ToString() + ":\\contin\\");
-            File.Delete(drive.TLetter.ToString() + ":\\contin\\DeployWindows.zip");
+            
         }
         
         private void OSSelect_Load_1(object sender, EventArgs e)
@@ -143,6 +153,8 @@ namespace mainUI
             try
             {
                 rel = listBox1.SelectedItem.ToString();
+                label9.Text = rel;
+
             } catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString() + " due to empty space being clicked. Error is ignored as it is not critical.");
@@ -162,9 +174,11 @@ namespace mainUI
             resizeControl(lab2, label2);
             resizeControl(lab3, label3);
             resizeControl(lab4, label4);
+            resizeControl(lab5, label5);
             resizeControl(lab6, label6);
+            resizeControl(lab7, label7);
             resizeControl(lab8, label8);
-
+            resizeControl(lab9, label9);
             resizeControl(but3, button3);
             resizeControl(but4, button4);
             resizeControl(but6, button6);
@@ -184,6 +198,15 @@ namespace mainUI
                     listBox1.Items.Add(row["Release"].ToString());
                 }
             }
+            rel = listBox1.Items[listBox1.Items.Count-1].ToString();
+            label9.Text = "Release:" + rel;
+            if (notAdded)
+            {
+                notAdded = false;
+                string[] languageArray = { "Arabic", "Bulgarian", "Czech", "Danish", "German", "Greek", "English", "Spanish", "Estonian", "Finnish", "French", "Hebrew", "Croatian", "Hungarian", "Italian", "Japanese", "Korean", "Lithuanian", "Latvian", "Dutch", "Norwegian", "Polish", "Romanian", "Russian", "Slovak", "Slovenian", "Serbian", "Swedish", "Thai", "Turkish", "Ukrainian" };
+                listBox2.Items.Clear();
+                listBox2.Items.AddRange(languageArray);
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -196,6 +219,15 @@ namespace mainUI
                 {
                     listBox1.Items.Add(row["Release"].ToString());
                 }
+            }
+            rel = listBox1.Items[listBox1.Items.Count - 1].ToString();
+            label9.Text = "Release:" + rel;
+            if (notAdded)
+            {
+                notAdded = false;
+                string[] languageArray = { "Arabic", "Bulgarian", "Czech", "Danish", "German", "Greek", "English", "Spanish", "Estonian", "Finnish", "French", "Hebrew", "Croatian", "Hungarian", "Italian", "Japanese", "Korean", "Lithuanian", "Latvian", "Dutch", "Norwegian", "Polish", "Romanian", "Russian", "Slovak", "Slovenian", "Serbian", "Swedish", "Thai", "Turkish", "Ukrainian" };
+                listBox2.Items.Clear();
+                listBox2.Items.AddRange(languageArray);
             }
         }
 

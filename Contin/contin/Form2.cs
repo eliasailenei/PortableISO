@@ -146,6 +146,7 @@ namespace mainUI
             }
             if (clean == DialogResult.Yes)
             {
+                // 1 for release and 0 for debug
                 var process = new Process
                 {
                     StartInfo = new ProcessStartInfo

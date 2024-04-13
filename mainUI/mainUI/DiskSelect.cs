@@ -124,13 +124,27 @@ namespace mainUI
                     Directory.Delete(drive.TLetter.ToString() + ":\\contin", true);
                 }
                 Directory.CreateDirectory(drive.TLetter.ToString() + ":\\contin");
-                using (var client = new WebClient())
+                try
                 {
-                    client.DownloadFile("https://github.com/eliasailenei/PortableISO/releases/download/Contin/Release.zip", drive.TLetter.ToString() + ":\\contin\\contin.zip");
+                    using (var client = new WebClient())
+                    {
+                        client.DownloadFile("https://github.com/eliasailenei/PortableISO/releases/download/Contin/Release.zip", drive.TLetter.ToString() + ":\\contin\\contin.zip");
+                    }
+                    ZipFile.ExtractToDirectory(drive.TLetter.ToString() + ":\\contin\\contin.zip", drive.TLetter.ToString() + ":\\contin");
+                    File.Delete(drive.TLetter.ToString() + ":\\contin\\contin.zip");
+                    Process.Start(drive.TLetter.ToString() + ":\\contin\\contin.exe", diskNum.ToString());
+                } catch (Exception ex)
+                {
+                    MessageBox.Show("Major error detected! This is mainly due to instable internet and is recommended you use a proxy or VPN to fix this.\n\nPC is shutting down\nError: " + ex.Message,"ERROR",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = @"wpeutil.exe",
+                        Arguments = $"reboot",
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    });
                 }
-                ZipFile.ExtractToDirectory(drive.TLetter.ToString() + ":\\contin\\contin.zip", drive.TLetter.ToString() + ":\\contin");
-                File.Delete(drive.TLetter.ToString() + ":\\contin\\contin.zip");
-                Process.Start(drive.TLetter.ToString() + ":\\contin\\contin.exe", diskNum.ToString());
+               
                 this.Hide();
             }
             else
@@ -346,18 +360,32 @@ namespace mainUI
         {
             DialogResult iquit = MessageBox.Show("Do you want to terminate the program? This will shutdown your PC!", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (iquit == DialogResult.Yes)
+            try
             {
-                Process.Start(new ProcessStartInfo
+                if (iquit == DialogResult.Yes)
                 {
-                    FileName = @"wpeutil.exe",
-                    Arguments = $"shutdown",
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                });
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = @"wpeutil.exe",
+                        Arguments = $"shutdown",
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    });
+                }
+                else
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = @"cmd.exe",
+                        Arguments = $"",
+                        //UseShellExecute = false,
+                        //CreateNoWindow = true
+                    });
+                }
             }
-            else
+            catch (Exception ex)
             {
+                MessageBox.Show($"Error: {ex.Message}");
             }
         }
 

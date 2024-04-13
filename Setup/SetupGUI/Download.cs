@@ -33,34 +33,40 @@ namespace SetupGUI
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            isoLocs(true);
-            while (isoLoc == null)
-            {
-                MessageBox.Show("Please select a folder.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                isoLocs(true);
-            }
-            button2.Enabled = false;
-            button3.Enabled = false;
-            await downloadTask(ISOURL, isoLoc);
             try
             {
-                Activation active = new Activation();
-                active.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                var message = MessageBox.Show("It looks like Windows Media Player failed to launch. This is mainly caused by computers with the N or KN versions. Microsoft has already given a hotfix, would you like to apply? You will need to restart PC.", "WARNING", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-                if (message == DialogResult.Yes)
+                isoLocs(true);
+                while (isoLoc == null)
                 {
-                    Process.Start("cmd.exe", "/c DISM /Online /Add-Capability /CapabilityName:Media.MediaFeaturePack~~~~0.0.1.0");
+                    MessageBox.Show("Please select a folder.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    isoLocs(true);
                 }
-                Environment.Exit(0);
+                button2.Enabled = false;
+                button3.Enabled = false;
+                await downloadTask(ISOURL, isoLoc);
+                try
+                {
+                    Activation active = new Activation();
+                    active.ShowDialog();
+                }
+                catch (Exception ex)
+                {
+                    var message = MessageBox.Show("It looks like Windows Media Player failed to launch. This is mainly caused by computers with the N or KN versions. Microsoft has already given a hotfix, would you like to apply? You will need to restart PC.", "WARNING", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    if (message == DialogResult.Yes)
+                    {
+                        Process.Start("cmd.exe", "/c DISM /Online /Add-Capability /CapabilityName:Media.MediaFeaturePack~~~~0.0.1.0");
+                    }
+                    Environment.Exit(0);
+                }
+                Disk_Mode disk = new Disk_Mode();
+                disk.option = mode;
+                disk.isoFile = isoLoc;
+                this.Close();
+                disk.Show();
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message + " Try again later.");
             }
-            Disk_Mode disk = new Disk_Mode();
-            disk.option = mode;
-            disk.isoFile = isoLoc;
-            this.Close();
-            disk.Show();
+           
         }
         private void isoLocs(bool isFolder)
         {

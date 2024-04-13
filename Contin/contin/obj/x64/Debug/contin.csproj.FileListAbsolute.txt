@@ -90,5 +90,5 @@ C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\bin\System.ValueTup
 C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\bin\System.Text.Encodings.Web.xml
 C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\contin.csproj.SuggestedBindingRedirects.cache
 C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\contin.exe.config
-C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\contin.csproj.CopyComplete
 C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\contin.Driver.resources
+C:\Users\remus\source\repos\Clones\PortableISO\Contin\contin\obj\x64\Debug\contin.csproj.Up2Date

@@ -211,6 +211,7 @@ namespace SetupGUI
                     {
                         if (Directory.Exists(workingFolder))
                         {
+                            button3.Enabled = false;
                             label9.Text = "Deleting past attempts";
                             progressBar1.Style = ProgressBarStyle.Marquee;
                             await Task.Run(() =>
@@ -259,6 +260,15 @@ namespace SetupGUI
                         label9.Text = "Done";
                         progressBar1.Value = progressBar1.Maximum;
                         MessageBox.Show("All Done!");
+                        await Task.Run(() =>
+                        {
+                            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("DISM.exe", $"/unmount-WIM /MountDir:\"{workingFolder}\\WIM\" /discard")
+                            {
+                                CreateNoWindow = true,
+                                UseShellExecute = false
+                            }).WaitForExit();
+                        });
+                        Directory.Delete(workingFolder, true);
                         Environment.Exit(0);
                     }
                     else

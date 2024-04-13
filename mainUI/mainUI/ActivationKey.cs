@@ -17,7 +17,7 @@ namespace mainUI
     {
         public event EventHandler InteractionComplete;
         bool hasBlacklist, hasRead, hasAccepted;
-        Decryptors decryptors;
+        Decryptors decryptors = new Decryptors();
         TextBox[] texts = new TextBox[4];
         private string key;
         activationLib active = new activationLib();
@@ -65,8 +65,8 @@ namespace mainUI
                             MessageBox.Show("Thank you for playing fair! You may continue!");
                             globalStrings.windowsKey = key;
                             File.WriteAllText("windowskey.txt", decryptors.Encrypt(globalStrings.windowsKey,"passforkey",128));
-                            InteractionComplete.Invoke(this, EventArgs.Empty);
                             this.Hide();
+                            InteractionComplete.Invoke(this, EventArgs.Empty);
                         } else
                         {
                             MessageBox.Show("Accept the agreement first!");
@@ -154,15 +154,32 @@ namespace mainUI
         {
             DialogResult iquit = MessageBox.Show("Do you want to terminate the program? This will shutdown your PC!", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (iquit == DialogResult.Yes)
+            try
             {
-                Process.Start(new ProcessStartInfo
+                if (iquit == DialogResult.Yes)
                 {
-                    FileName = @"wpeutil.exe",
-                    Arguments = $"shutdown",
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                });
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = @"wpeutil.exe",
+                        Arguments = $"shutdown",
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    });
+                }
+                else
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = @"cmd.exe",
+                        Arguments = $"",
+                        //UseShellExecute = false,
+                        //CreateNoWindow = true
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
             }
         }
 

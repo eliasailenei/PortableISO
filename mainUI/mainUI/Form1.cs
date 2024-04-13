@@ -167,39 +167,59 @@ namespace mainUI
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Process.Start(@"X:\Windows\System32\WinXShell\WinXShell.exe", "-ui -jcfg wxsUI\\UI_Resolution.zip");
-           
+            try
+            {
+                Process.Start(@"X:\Windows\System32\WinXShell\WinXShell.exe", "-ui -jcfg wxsUI\\UI_Resolution.zip");
+            } catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+             
+
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Process.Start(@"X:\Windows\System32\WinXShell\WinXShell.exe", "-ui -jcfg wxsUI\\UI_WIFI.zip");
+            try
+            {
+                Process.Start(@"X:\Windows\System32\WinXShell\WinXShell.exe", "-ui -jcfg wxsUI\\UI_WIFI.zip");
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+
+            }
+
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             DialogResult iquit = MessageBox.Show("Do you want to terminate the program? This will shutdown your PC!", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (iquit == DialogResult.Yes)
+            try
             {
-                Process.Start(new ProcessStartInfo
+                if (iquit == DialogResult.Yes)
                 {
-                    FileName = @"wpeutil.exe",
-                    Arguments = $"shutdown",
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                });
-            }
-            else
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = @"wpeutil.exe",
+                        Arguments = $"shutdown",
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    });
+                }
+                else
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = @"cmd.exe",
+                        Arguments = $"",
+                        //UseShellExecute = false,
+                        //CreateNoWindow = true
+                    });
+                }
+            } catch (Exception ex)
             {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = @"cmd.exe",
-                    Arguments = $"",
-                    //UseShellExecute = false,
-                    //CreateNoWindow = true
-                });
+                MessageBox.Show($"Error: {ex.Message}");
             }
+            
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -253,15 +273,8 @@ namespace mainUI
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
             isAble(false);
-            label4.Text = "Loading drivers";
             try
             {
-                Process peDriver = new Process();
-                peDriver.StartInfo.FileName = "X:\\Windows\\System32\\PENetwork\\PENetwork.exe";
-                peDriver.StartInfo.UseShellExecute = false;
-                peDriver.StartInfo.CreateNoWindow = false;
-                peDriver.Start();
-                peDriver.WaitForExit();
                 if (sql.getScriptExistance())
                 {
                     if (sql.xmlStatus() == false)

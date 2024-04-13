@@ -24,7 +24,9 @@ namespace SetupGUI
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Link to download");
+            System.Diagnostics.Process.Start("https://github.com/eliasailenei/PortableBackup/releases/tag/V1");
+            this.Close();
+
         }
     }
 }
