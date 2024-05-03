@@ -71,7 +71,7 @@ namespace contin
             labl3 = new Rectangle(label3.Location, label3.Size);   
             labl4 = new Rectangle(label4.Location, label4.Size);
         }
-        private void Rsize(object sender, EventArgs e)
+        private void Rsize(object sender, EventArgs e) // recursive alogrithm
         {
             resizeControl(labl1, label1);
             resizeControl(labl2, label2);
@@ -136,7 +136,7 @@ namespace contin
             
             
         }
-        private void setKeyboard(string langToSeach)
+        private void setKeyboard(string langToSeach) // use of dictionaries
         {
             Dictionary<string, Tuple<string, string>> customLang = new Dictionary<string, Tuple<string, string>>();
             customLang.Add("Arabic", Tuple.Create("ar-SA", "0401:00000401"));
@@ -187,7 +187,7 @@ namespace contin
             string batchScript = @"@echo off" + Environment.NewLine +
                     @"start /wait C:\Windows\Setup\Scripts\MoveInstalled.exe" + Environment.NewLine +
                     @"del %0";
-            File.WriteAllText(drive.TLetter.ToString() + ":\\contin\\installer.bat", batchScript);
+            File.WriteAllText(drive.TLetter.ToString() + ":\\contin\\installer.bat", batchScript); // creating and writing a file
             string xmlContent = @"<?xml version=""1.0"" encoding=""utf-8""?>" + Environment.NewLine +
      @"<unattend xmlns=""urn:schemas-microsoft-com:unattend"">" + Environment.NewLine +
      @"    <settings pass=""oobeSystem"">" + Environment.NewLine +

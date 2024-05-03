@@ -168,7 +168,7 @@ namespace SetupGUI
                     byte[] buffer = new byte[8192];
 
                     using (Stream contentStream = await response.Content.ReadAsStreamAsync())
-                    using (FileStream fileStream = new FileStream(savePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                    using (FileStream fileStream = new FileStream(savePath, FileMode.Create, FileAccess.Write, FileShare.None)) // writing and reading from files
                     {
                         int bytesRead;
                         while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)

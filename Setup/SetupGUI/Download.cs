@@ -18,17 +18,16 @@ namespace SetupGUI
     public partial class Download : Form
     {
         public string mode { get; set; }
-        public const string ISOURL = "https://github.com/eliasailenei/PortableISO/releases/download/V2/release.iso";
-        string ISOBurner = Path.Combine(Environment.SystemDirectory, "isoburn.exe");
+        public const string ISOURL = "https://github.com/eliasailenei/PortableISO/releases/download/V2/release.iso"; // perma link will never change
         string isoLoc;
         public Download()
         {
-            InitializeComponent();
+            InitializeComponent(); // loads UI components
         }
 
         private void Download_Load(object sender, EventArgs e)
         {
-            button1.Enabled = false;
+            button1.Enabled = false; // user must first get the image
         }
 
         private async void button2_Click(object sender, EventArgs e)
@@ -140,7 +139,7 @@ namespace SetupGUI
                     byte[] buffer = new byte[8192];
 
                     using (Stream contentStream = await response.Content.ReadAsStreamAsync())
-                    using (FileStream fileStream = new FileStream(savePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                    using (FileStream fileStream = new FileStream(savePath, FileMode.Create, FileAccess.Write, FileShare.None)) // writing and reading from a file
                     {
                         int bytesRead;
                         while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)

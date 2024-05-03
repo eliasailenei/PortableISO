@@ -20,11 +20,11 @@ namespace SetupGUI
         }
         private void button3_Click(object sender, EventArgs e)
         {
-            try
+            try // make the video player fullscreen
             {
                 if (axWindowsMediaPlayer1.fullScreen)
                 {
-                    axWindowsMediaPlayer1.fullScreen = false;
+                    axWindowsMediaPlayer1.fullScreen = false; 
                 }
                 else
                 {
@@ -39,21 +39,22 @@ namespace SetupGUI
         private void VM_Load(object sender, EventArgs e)
         {
             
-            axWindowsMediaPlayer1.URL = "https://github.com/eliasailenei/PortableISO/raw/main/Videos/vmtut.mp4";
+            axWindowsMediaPlayer1.URL = "https://github.com/eliasailenei/PortableISO/raw/main/Videos/vmtut.mp4"; // loads the video player with the tutorial
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.virtualbox.org");
+            System.Diagnostics.Process.Start("https://www.virtualbox.org"); // link to virtualbox
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/eliasailenei/PortableISO/releases/tag/V2");
+            System.Diagnostics.Process.Start("https://github.com/eliasailenei/PortableISO/releases/tag/V2"); // link to the ISO
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
+            // close all windows algorithm
             List<Form> formsToClose = new List<Form>();
             foreach (Form form in Application.OpenForms)
             {

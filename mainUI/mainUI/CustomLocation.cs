@@ -15,18 +15,31 @@ namespace mainUI
     public partial class CustomLocation : UserControl
     {
         public SQLCheck sql { get; set; }
+        public bool isReady { get; set; }  
         public CustomLocation()
         {
             InitializeComponent();
         }
+        public event EventHandler InteractionComplete;
 
         private void button2_Click(object sender, EventArgs e)
         {
             sql.setCustomLocation(textBox1.Text);
             if (sql.xmlStatus())
             {
-                MessageBox.Show("Done");
-                this.Hide();
+                if (sql.isOnline)
+                {
+                    Cursor = Cursors.WaitCursor;
+                    remoteData remote = new remoteData(sql);
+                    remote.getAutoStatus();
+                    Cursor = Cursors.Arrow;
+                }
+                else
+                {
+                    localData local = new localData(sql);
+                }
+                InteractionComplete.Invoke(this, EventArgs.Empty);
+                isReady = true; 
             }
             else
             {

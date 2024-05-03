@@ -28,5 +28,10 @@ namespace SetupGUI
             this.Close();
 
         }
+
+        private void Backup_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

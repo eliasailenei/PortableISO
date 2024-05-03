@@ -94,7 +94,7 @@ namespace mainUI
             but1 = new Rectangle(button1.Location, button1.Size);
             but2 = new Rectangle(button2.Location, button2.Size);
         }
-        private void Form2_rsize(object sender, EventArgs e)
+        private void Form2_rsize(object sender, EventArgs e) // recursive algorithm
         {
             resizeControl(lab1, label1);
             resizeControl(lab2, label2);
@@ -124,7 +124,7 @@ namespace mainUI
 
             if (cleans == DialogResult.Yes)
             {
-                File.WriteAllText(Environment.SystemDirectory + "\\done.txt", "done");
+                File.WriteAllText(Environment.SystemDirectory + "\\done.txt", "done"); // writing and reading a file
                 MessageBox.Show("Thank you for using PortableISO");
                 Process.Start(drive.TLetter.ToString() + ":\\contin\\DeployWindows.exe",  "topass='" + topass + "' disks='" + disk[1] + "' isExpress='False'");
             }

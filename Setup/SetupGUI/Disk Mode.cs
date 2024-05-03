@@ -91,7 +91,7 @@ namespace SetupGUI
                 Regex keepOnlyDrive = new Regex(@"^\d");
                 Regex keepOnlyUSB = new Regex(toLookFor);
 
-                using (StreamReader original = new StreamReader("diskinfo.txt"))
+                using (StreamReader original = new StreamReader("diskinfo.txt")) // writing and reading from files
                 {
                     string line;
                     while ((line = original.ReadLine()) != null)
@@ -461,7 +461,7 @@ namespace SetupGUI
             FileInfo checkLength = new FileInfo(path);
             if (checkLength.Exists)
             {
-                finalRes = Convert.ToInt32(checkLength.Length / Math.Pow(10, 6)) + 1;
+                finalRes = Convert.ToInt32(checkLength.Length / Math.Pow(10, 6)) + 1; // simple math equations
             }
             else
             {

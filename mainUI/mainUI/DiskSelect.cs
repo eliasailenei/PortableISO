@@ -50,7 +50,7 @@ namespace mainUI
             labl8 = new Rectangle(label8.Location, label8.Size);
             labl5 = new Rectangle(label5.Location, label5.Size);
         }
-        private void DiskSelect_resiz(object sender, EventArgs e)
+        private void DiskSelect_resiz(object sender, EventArgs e) // recursive algorith
         {
             resizeControl(buttn8, button8);
             resizeControl(buttn7, button7);
@@ -410,7 +410,7 @@ namespace mainUI
             {
                 MessageBox.Show("Box is empty");
             }
-            File.WriteAllText("dis.txt", diskNums.ToString());
+            File.WriteAllText("dis.txt", diskNums.ToString()); // writing and reading from file
             using (StreamReader reader = new StreamReader("dis.txt"))
             {
                 string line;
@@ -486,7 +486,7 @@ namespace mainUI
             string output = p.StandardOutput.ReadToEnd();
         }
 
-        static void QuickSortAlgorithm(string[] array, int left, int right)
+        static void QuickSortAlgorithm(string[] array, int left, int right) // quick sort // recursive algorithm
         {
             if (left < right)
             {

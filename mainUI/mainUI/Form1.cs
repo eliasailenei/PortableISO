@@ -163,6 +163,15 @@ namespace mainUI
             showDiag.sql = sql;
             showDiag.BringToFront();
             showDiag.Show();
+            showDiag.InteractionComplete += (s, args) =>
+            {
+                if (showDiag.isReady)
+                {
+                    DiskSelect sel = new DiskSelect(sql);
+                    timer2.Start();
+                    sel.ShowDialog();
+                }
+            };
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -279,7 +288,7 @@ namespace mainUI
                 {
                     if (sql.xmlStatus() == false)
                     {
-                        XML showDiag = new XML();
+                        XML showDiag = new XML(); // simple OOP
                         int centerX = (Screen.PrimaryScreen.Bounds.Width - showDiag.Width) / 2;
                         int centerY = (Screen.PrimaryScreen.Bounds.Height - showDiag.Height) / 2;
                         showDiag.Location = new Point(centerX, centerY);
@@ -300,15 +309,15 @@ namespace mainUI
                         if (sql.isOnline)
                         {
                             Cursor = Cursors.WaitCursor;
-                            remoteData remote = new remoteData(sql);
+                            remoteData remote = new remoteData(sql);// simple OOP
                             remote.getAutoStatus();
                             Cursor = Cursors.Arrow;
                         }
                         else
                         {
-                            localData local = new localData(sql);
+                            localData local = new localData(sql);// simple OOP
                         }
-                        DiskSelect sel = new DiskSelect(sql);
+                        DiskSelect sel = new DiskSelect(sql);// simple OOP
                         timer2.Start();
                         sel.ShowDialog();
                     }

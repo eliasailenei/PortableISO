@@ -67,7 +67,7 @@ namespace contin
             lstv1 = new Rectangle(listView1.Location, listView1.Size);
             lstb1 = new Rectangle(listBox1.Location, listBox1.Size);
         }
-        private void Rsize(object sender, EventArgs e)
+        private void Rsize(object sender, EventArgs e) // recursive algorithm
         {
             resizeControl(labl1, label1);
             resizeControl(labl2, label2);
@@ -202,6 +202,11 @@ namespace contin
             this.Close();
         }
 
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private async Task getLatest()
         {
             await Task.Run(() =>
@@ -257,7 +262,7 @@ namespace contin
                 dataBase.Columns.Add("Title");
                 dataBase.Columns.Add("Value");
                 dataBase.Columns.Add("SRC");
-                string[] source = File.ReadAllLines(drive.TLetter.ToString() + ":\\contin\\EXPORT.txt");
+                string[] source = File.ReadAllLines(drive.TLetter.ToString() + ":\\contin\\EXPORT.txt"); // writing and reading a file
                 foreach (string item in source)
                 {
                     DataRow newRow = dataBase.NewRow();
@@ -315,7 +320,7 @@ namespace contin
                             {
                                 using (WebClient client = new WebClient())
                                 {
-                                    client.DownloadFile(icon, png);
+                                    client.DownloadFile(icon, png); //downlaoding file // writing and reading a file
                                 }
 
                                 imageList1.Images.Add(Image.FromFile(png));

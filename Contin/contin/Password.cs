@@ -62,7 +62,7 @@ namespace contin
             txtb2 = new Rectangle(textBox2.Location, textBox2.Size);
             
         }
-        private void Rsize(object sender, EventArgs e)
+        private void Rsize(object sender, EventArgs e) //recursive algorithm
         {
             resizeControl(labl2, label2);
             resizeControl(bttn1, button1);

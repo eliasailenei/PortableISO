@@ -19,8 +19,8 @@ namespace contin
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            DriveLetters drives = new DriveLetters(Environment.SystemDirectory + "\\driveLetters.txt");
-            SQLCheck sql = new SQLCheck();
+            DriveLetters drives = new DriveLetters(Environment.SystemDirectory + "\\driveLetters.txt"); // reading and writing a file
+            SQLCheck sql = new SQLCheck(); // simple OOP
             
             if (sql.xmlStatus())
             {
@@ -36,7 +36,7 @@ namespace contin
                     localData local = new localData(sql);
                 }
             }
-            mainUI.OSSelect change = new mainUI.OSSelect(sql, drives);
+            mainUI.OSSelect change = new mainUI.OSSelect(sql, drives); // simple OOP
             change.ShowDialog();
             this.Close();
         }

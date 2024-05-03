@@ -168,7 +168,7 @@ namespace mainUI
             }
         }
   
-        private void OSSelect_rsize(object sender, EventArgs e)
+        private void OSSelect_rsize(object sender, EventArgs e) // recursive algorithm
         {
             resizeControl(lab1, label1);
             resizeControl(lab2, label2);

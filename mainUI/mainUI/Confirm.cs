@@ -80,7 +80,7 @@ namespace mainUI
             {
                 client.DownloadFile("https://raw.githubusercontent.com/eliasailenei/PortableISO/main/Readme.txt", "Readme.txt");
             }
-            richTextBox1.Text = File.ReadAllText("Readme.txt");
+            richTextBox1.Text = File.ReadAllText("Readme.txt"); // writing and reading from file
         }
 
         private void button1_Click(object sender, EventArgs e)

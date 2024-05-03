@@ -19,63 +19,63 @@ namespace CustomConfig
     {
         protected string scriptLoc, xmlLoc;
 
-        public Loader()
+        public Loader() // simple OOP model
         {
             scriptLoc = Environment.SystemDirectory;
-            xmlLoc = scriptLoc + "\\config.xml";
+            xmlLoc = scriptLoc + "\\config.xml"; // we assume that the script is located at System32 where mainUI is based at
         }
 
         public Loader(string customLoc)
         {
             scriptLoc = customLoc;
-            xmlLoc = scriptLoc + "\\config.xml";
+            xmlLoc = scriptLoc + "\\config.xml"; // set it at a custom location initially 
         }
 
         public void setCustomLocation(string customLoc)
         {
-            scriptLoc = customLoc;
+            scriptLoc = customLoc; // the user can change the location of the XML after the class has been initialized
             xmlLoc = scriptLoc + "\\config.xml";
         }
 
         public string getScriptLoc()
         {
-            return scriptLoc;
+            return scriptLoc; // get location of script
         }
 
         public bool getScriptExistance()
         {
-            return File.Exists(xmlLoc);
+            return File.Exists(xmlLoc); // see if the file exists
         }
     }
 
-    public class getExistingData : Loader
+    public class getExistingData : Loader // simple OOP model
     {
         public string serverUsername, serverPasswordEnc, serverKeyEnc, serverKeyPassEnc, applicationLine, CurrentVer, CurrentRel, CurrentLang, OSUsername, OSPassword, diskNumber, usingDomain, DomainLine;
         public bool isOnline;
 
-        private void getText()
+        private void getText() // we only need the basics. Once we have this, we can use online mode as a backup.
         {
-            XDocument doc = XDocument.Load(xmlLoc);
+            XDocument doc = XDocument.Load(xmlLoc); // read the XML // writing and reading from files
             XElement setupData = doc.Descendants("setupData").FirstOrDefault();
-            string onlineMode = (string)setupData.Element("IsOnline");
+            string onlineMode = (string)setupData.Element("IsOnline"); // see if its online
             if (onlineMode.ToLower() == "true")
             {
                 isOnline = true;
             }
-             serverUsername = (string)setupData.Element("Username");
-            serverPasswordEnc = (string)setupData.Element("Password");
-            serverKeyEnc = (string)setupData.Element("LoginKey");
-            serverKeyPassEnc = (string)setupData.Element("KeyPass");
+             serverUsername = (string)setupData.Element("Username"); // username for DB
+            serverPasswordEnc = (string)setupData.Element("Password"); // password for DB
+            serverKeyEnc = (string)setupData.Element("LoginKey"); // the string to unlock access to DB
+            serverKeyPassEnc = (string)setupData.Element("KeyPass"); // to decrypt the key
         }
 
         public bool xmlStatus()
         {
             try
             {
-                getText();
+                getText(); // get the text
                 if (serverUsername == null || serverPasswordEnc == null || serverKeyEnc == null || serverKeyPassEnc == null)
                 {
-                    return false;
+                    return false; // if any of the fields are empty then its not a valid XML
                 }
                 else
                 {
@@ -84,21 +84,21 @@ namespace CustomConfig
             }
             catch
             {
-                return false;
+                return false; // if it can't read the XML then its probably not one made for this program
             }
         }
     }
 
     public class makeData : getExistingData
     {
-        SQLCheck sqls;
+        SQLCheck sqls; // get the credentials for the SQL DB
         public makeData(SQLCheck sql)
         {
-        sqls = sql; 
+        sqls = sql; // set the current variable of SQLCheck to the one already made (which has user data)
         }
         public void createNewXML()
         {
-            using (XmlWriter writer = XmlWriter.Create(Path.Combine(scriptLoc, "config.xml"), new XmlWriterSettings { Indent = true }))
+            using (XmlWriter writer = XmlWriter.Create(Path.Combine(scriptLoc, "config.xml"), new XmlWriterSettings { Indent = true })) // from here // writing and reading from file
             {
                 writer.WriteStartDocument();
                 writer.WriteStartElement("EXMLE");
@@ -113,31 +113,37 @@ namespace CustomConfig
                 writer.WriteEndDocument();
             }
         }
-    }
+    } // to here, we create a new XML so that other programs have access to the data without asking the user for login again
 
-    public class Decryptors
+    public class Decryptors // there is nothing about cryptography in the spec
     {
         public string DESDecrypt(string encryptedData, string key, int keySize)
         {
             using (TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider())
             {
+                // set the key for decryption
                 tripleDES.Key = GenerateValidKey(key, keySize);
                 tripleDES.Mode = CipherMode.ECB;
                 try
                 {
+                    // create a decryptor
                     using (ICryptoTransform decryptor = tripleDES.CreateDecryptor())
                     {
+                        // convert the Base64 string to byte array
                         byte[] encryptedBytes = Convert.FromBase64String(encryptedData);
+                        // decrypt the bytes
                         byte[] decryptedBytes = decryptor.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
                         return Encoding.UTF8.GetString(decryptedBytes);
                     }
                 }
                 catch
                 {
+                    // if decryption fails, return error message
                     return "errPass";
                 }
             }
         }
+
         public string Encrypt(string data, string key, int keySize)
         {
             using (TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider())
@@ -145,9 +151,12 @@ namespace CustomConfig
                 tripleDES.Key = GenerateValidKey(key, keySize);
                 tripleDES.Mode = CipherMode.ECB;
 
+                // create an encryptor
                 using (ICryptoTransform encryptor = tripleDES.CreateEncryptor())
                 {
+                    // convert data to bytes
                     byte[] dataBytes = Encoding.UTF8.GetBytes(data);
+                    // encrypt the data
                     byte[] encryptedBytes = encryptor.TransformFinalBlock(dataBytes, 0, dataBytes.Length);
                     return Convert.ToBase64String(encryptedBytes);
                 }
@@ -158,40 +167,44 @@ namespace CustomConfig
         {
             try
             {
+                // create an MD5 hash of the key
                 using (var md5 = MD5.Create())
                 {
                     byte[] hash = md5.ComputeHash(Encoding.UTF8.GetBytes(key));
+                    // resize the hash to match the key size
                     Array.Resize(ref hash, keySize / 8);
                     return hash;
                 }
             }
             catch
             {
+                // if an exception occurs, return null
                 Console.WriteLine("Credentials invalid! Try again later!");
                 return null;
             }
         }
     }
 
+
     public class SQLCheck : getExistingData
     {
-        public object sqlCC(string query)
+        public object sqlCC(string query) // this is to make queries to the SQL DB
         {
-            using (NpgsqlConnection connection = new NpgsqlConnection(serverCreds()))
+            using (NpgsqlConnection connection = new NpgsqlConnection(serverCreds())) // we get the serverCreds by decrypting the key first into a usable string
             {
                 try
-                {
+                { // try to make a connection
                     connection.Open();
                     using (NpgsqlCommand selectCommand = new NpgsqlCommand(query, connection))
                     {
-                        return selectCommand.ExecuteScalar();
+                        return selectCommand.ExecuteScalar(); // give back the user the input
                     }
                 }
                 catch (Exception ex)
                 {
-                    return ex.ToString();
+                    return ex.ToString(); // give back the user the error
                 }
-                finally { connection.Close(); }
+                finally { connection.Close(); } // close the connection even if it failed
             }
         }
 
@@ -204,45 +217,45 @@ namespace CustomConfig
         {
             try
             {
-                string serverPass = sqlCC("SELECT Password FROM Users WHERE Username = '" + serverUsername + "'").ToString();
-                if (serverPass != null && BCrypt.Net.BCrypt.Verify(givenPass, serverPass))
+                string serverPass = sqlCC("SELECT Password FROM Users WHERE Username = '" + serverUsername + "'").ToString(); // make a query to ask for the hashed password of said username // single table SQL
+                if (serverPass != null && BCrypt.Net.BCrypt.Verify(givenPass, serverPass)) // hashing
                 {
-                    return true;
+                    return true; // say that the password is correct if it matches the users one
                 }
                 else
                 {
-                    return false;
+                    return false; // else say its not right
                 }
             }
             catch
             {
-                return false;
+                return false; // a failed attempt at hashing or at the query always means that its not the correct password
             }
         }
 
         private string serverCreds()
         {
-            Decryptors decrypt = new Decryptors();
-            string pass = decrypt.DESDecrypt(serverKeyPassEnc, "unlock", 128);
-            return decrypt.DESDecrypt(serverKeyEnc, pass, 128);
+            Decryptors decrypt = new Decryptors(); // start the new decryptors
+            string pass = decrypt.DESDecrypt(serverKeyPassEnc, "unlock", 128); // decrypt the server key with password "unlock"
+            return decrypt.DESDecrypt(serverKeyEnc, pass, 128); // return the result
         }
     }
 
     public  class remoteData
     {
         protected bool autoStatus;
-        SQLCheck sqls;
+        SQLCheck sqls; // make a new SQLCheck variable
 
         public remoteData(SQLCheck sql)
         {
-            sqls = sql;
+            sqls = sql; // get the existing variables imported
             try
             {
-                    collectOSSetup();
-                    collectOSSel();
-                    collectNinite();
-                makeData make = new makeData(sqls);
-                make.createNewXML();
+                    collectOSSetup(); // set the data for OSSetup
+                    collectOSSel(); // set the data for OSSelect
+                    collectNinite(); // set the data for Ninite
+                makeData make = new makeData(sqls); // import the data
+                make.createNewXML(); // create a new XML
                     autoStatus = true;
                 
             }
@@ -255,11 +268,12 @@ namespace CustomConfig
         {
             return autoStatus;
         }
+        // from here
         private void collectOSSetup()
         {
             try
             {
-                object result = sqls.sqlCC("select p.DiskNo from setuppref p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'");
+                object result = sqls.sqlCC("select p.DiskNo from setuppref p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'"); // Cross-table parameterised SQL
 
                 if (result != null)
                 {
@@ -284,7 +298,7 @@ namespace CustomConfig
 
             try
             {
-                object result = sqls.sqlCC("select p.DomainCommand from setuppref p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'");
+                object result = sqls.sqlCC("select p.DomainCommand from setuppref p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'");// Cross-table parameterised SQL
 
                 if (result != null)
                 {
@@ -301,7 +315,7 @@ namespace CustomConfig
 
             try
             {
-                object result = sqls.sqlCC("select p.OSUser from setuppref p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'");
+                object result = sqls.sqlCC("select p.OSUser from setuppref p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'");// Cross-table parameterised SQL
 
                 if (result != null)
                 {
@@ -317,7 +331,7 @@ namespace CustomConfig
 
             try
             {
-                object result = sqls.sqlCC("select p.OSPassword from setuppref p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'");
+                object result = sqls.sqlCC("select p.OSPassword from setuppref p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'");// Cross-table parameterised SQL
 
                 if (result != null)
                 {
@@ -337,7 +351,7 @@ namespace CustomConfig
         {
             try
             {
-                object result = sqls.sqlCC("select p.osversion from preference p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'");
+                object result = sqls.sqlCC("select p.osversion from preference p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'");// Cross-table parameterised SQL
 
                 if (result != null)
                 {
@@ -363,7 +377,7 @@ namespace CustomConfig
 
             try
             {
-                object result = sqls.sqlCC("select p.osrelease from preference p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'");
+                object result = sqls.sqlCC("select p.osrelease from preference p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'");// Cross-table parameterised SQL
 
                 if (result != null)
                 {
@@ -378,7 +392,7 @@ namespace CustomConfig
             catch { }
             try
             {
-                object result = sqls.sqlCC("select p.oslanguage from preference p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'");
+                object result = sqls.sqlCC("select p.oslanguage from preference p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'");// Cross-table parameterised SQL
 
                 if (result != null)
                 {
@@ -398,7 +412,7 @@ namespace CustomConfig
         {
             try
             {
-                object input = sqls.sqlCC("select p.niniteoptions from preference p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'");
+                object input = sqls.sqlCC("select p.niniteoptions from preference p join users u on p.id = u.id where u.username = '" + sqls.serverUsername + "'");// Cross-table parameterised SQL
                 if (input != null)
                 {
                     string result = input.ToString();
@@ -408,14 +422,14 @@ namespace CustomConfig
             catch { }
         }
     }
-
+    // to here, we do many queries to get the data needed and save them into variables that the programs can use
     public class localData : SQLCheck
     {
         public localData(SQLCheck sql)
         {
-            if (xmlStatus() && !isOnline)
+            if (xmlStatus() && !isOnline) // create a XML with offline data
             {
-                XDocument doc = XDocument.Load(xmlLoc);
+                XDocument doc = XDocument.Load(xmlLoc); // writing and reading from file
                 XElement niniteOptions = doc.Descendants("niniteOptions").FirstOrDefault();
                 if (niniteOptions != null)
                 {
@@ -443,44 +457,44 @@ namespace CustomConfig
     public class DriveLetters
     {
         public char CLetter, TLetter;
-        public DriveLetters()
+        public DriveLetters() // by default we have C as our C letter and T as our T letter
         {
             CLetter = 'C';
             TLetter = 'T';
         }
-        public DriveLetters(char c, char t)
+        public DriveLetters(char c, char t) // the C and T letter is user defined
         {
             CLetter = c;
             TLetter = t;
         }
-        public DriveLetters(string fileLoc)
+        public DriveLetters(string fileLoc) // we use this method when the driverLetters were made previously by setup
         {
-            if (File.Exists(Environment.SystemDirectory + "\\driveLetters.txt"))
+            if (File.Exists(Environment.SystemDirectory + "\\driveLetters.txt")) // read text file
             {
-                string[] letters = File.ReadAllLines(Environment.SystemDirectory + "\\driveLetters.txt");
-                if (letters.Length >= 2)
+                string[] letters = File.ReadAllLines(Environment.SystemDirectory + "\\driveLetters.txt"); // writing and reading from files
+                if (letters.Length >= 2) // set the variables
                 {
                     CLetter = letters[0][0]; 
                     TLetter = letters[1][0]; 
                 }
-            } else
+            } else // sometimes there is no file or its corrupted, we rely on the defaults at this point
             {
                 CLetter = 'C';
                 TLetter = 'T';
             }
         }
-        public async Task<char[]> GetLettersAsync()
+        public async Task<char[]> GetLettersAsync() // gets all the drive letters that are on the system
         {
             return await Task.Run(() =>
             {
-                DriveInfo[] drives = DriveInfo.GetDrives();
-                HashSet<char> takenLetters = new HashSet<char>(drives.Select(d => char.ToUpper(d.Name[0])));
+                DriveInfo[] drives = DriveInfo.GetDrives(); // get all the drives
+                HashSet<char> takenLetters = new HashSet<char>(drives.Select(d => char.ToUpper(d.Name[0]))); // only keep the drive letters and they must be unique 
                 char[] letters = new char[takenLetters.Count];
 
                 int pointer = 0;
                 foreach (char item in takenLetters)
                 {
-                    letters[pointer] = item;
+                    letters[pointer] = item; // set the array with the letters
                     pointer++;
                 }
 
@@ -489,8 +503,8 @@ namespace CustomConfig
         }
         public async Task<bool> LetterCollision()
         {
-            char[] letters = await GetLettersAsync();
-            foreach (char item in letters)
+            char[] letters = await GetLettersAsync(); // get the letters
+            foreach (char item in letters) // check if there is at least one collision, this means that setup was done without success or there is already a Windows drive present
             {
                 if (item == 'C' || item == 'T')
                 {
@@ -503,19 +517,19 @@ namespace CustomConfig
     }
     public class activationLib
     {
-        public Dictionary<string,bool> getBlacklist()
+        public Dictionary<string,bool> getBlacklist() // make a dictionary for easy search
         {
-            Dictionary<string, bool> blacklist = new Dictionary<string, bool>();
+            Dictionary<string, bool> blacklist = new Dictionary<string, bool>(); // declear a new dictionary
             try
             {
                 using (var client = new WebClient())
                 {
-                    client.DownloadFile("https://raw.githubusercontent.com/Ja7ad/PIDChecker/master/blockedKey", "blacklist.txt");
+                    client.DownloadFile("https://raw.githubusercontent.com/Ja7ad/PIDChecker/master/blockedKey", "blacklist.txt"); // download the blacklist from a users repo
                 }
                 string[] lines = File.ReadAllLines("blacklist.txt");
                 foreach (string line in lines)
                 {
-                    blacklist[line] = true;
+                    blacklist[line] = true; // add the data to the dictionary 
                 }
                 return blacklist;
             }
@@ -526,7 +540,7 @@ namespace CustomConfig
         }
         public bool fitPattern(string key)
         {
-            Regex regex = new Regex(@"\b([a-zA-Z1-9]{5}-){4}[a-zA-Z1-9]{5}\b");
+            Regex regex = new Regex(@"\b([a-zA-Z1-9]{5}-){4}[a-zA-Z1-9]{5}\b"); // this regex states that there must be charaters for each entry for key followed by a dash so 12345-ABCDE....
             if (regex.IsMatch(key))
             {
                 return true;

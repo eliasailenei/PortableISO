@@ -20,7 +20,7 @@ namespace mainUI
         Decryptors decryptors = new Decryptors();
         TextBox[] texts = new TextBox[4];
         private string key;
-        activationLib active = new activationLib();
+        activationLib active = new activationLib(); // simple oop
 
         Dictionary<string, bool> blacklist = new Dictionary<string, bool>();
         public ActivationKey()
@@ -64,7 +64,7 @@ namespace mainUI
                         {
                             MessageBox.Show("Thank you for playing fair! You may continue!");
                             globalStrings.windowsKey = key;
-                            File.WriteAllText("windowskey.txt", decryptors.Encrypt(globalStrings.windowsKey,"passforkey",128));
+                            File.WriteAllText("windowskey.txt", decryptors.Encrypt(globalStrings.windowsKey,"passforkey",128)); // writing and reading from file
                             this.Hide();
                             InteractionComplete.Invoke(this, EventArgs.Empty);
                         } else
