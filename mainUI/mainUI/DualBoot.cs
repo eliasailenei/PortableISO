@@ -40,7 +40,7 @@ namespace mainUI
 
         private async void textBox1_TextChanged(object sender, EventArgs e)
         {
-            textBox1.Text = textBox1.Text.ToUpper();
+            textBox1.Text = textBox1.Text.ToUpper(); //text
             char[] unacceptableLetters = await drive.GetLettersAsync(); 
             string inputText = textBox1.Text.Trim(); 
             if (string.IsNullOrEmpty(inputText))
